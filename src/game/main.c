@@ -5,6 +5,9 @@ struct g g={0};
 void egg_client_quit(int status) {
 }
 
+/* Init.
+ */
+
 int egg_client_init() {
 
   int fbw=0,fbh=0;
@@ -14,33 +17,82 @@ int egg_client_init() {
     return -1;
   }
 
-  g.romc=egg_rom_get(0,0);
-  if (!(g.rom=malloc(g.romc))) return -1;
-  egg_rom_get(g.rom,g.romc);
+  if (res_init()<0) return -1;
   
   if (egg_texture_load_image(g.texid_font=egg_texture_new(),RID_image_font)<0) return -1;
   if (egg_texture_load_image(g.texid_tiles=egg_texture_new(),RID_image_tiles)<0) return -1;
+  
+  srand_auto();
 
+  if (session_reset(&g.session)<0) return -1;
+  if (!modal_spawn(&modal_type_play)) return -1;
   //TODO
 
   return 0;
 }
 
+/* Update.
+ */
+
 void egg_client_update(double elapsed) {
-  //TODO
+  
+  int input=egg_input_get_one(0);
+  int pvinput=g.pvinput;
+  g.pvinput=input;
+  
+  // Acquire focus modal if needed, and update it. Abort if no focussed modal.
+  if (!g.modal_focus) {
+    int i=g.modalc;
+    while (i-->0) {
+      struct modal *modal=g.modalv[i];
+      if (modal->defunct) continue;
+      if (modal->type->interactive) {
+        g.modal_focus=modal;
+        break;
+      }
+    }
+    if (!g.modal_focus) { egg_terminate(1); return; }
+  }
+  g.modal_focus->type->update(g.modal_focus,elapsed,input,pvinput);
+  
+  // Reap defunct modals.
+  int i=g.modalc;
+  while (i-->0) {
+    struct modal *modal=g.modalv[i];
+    if (!modal->defunct) continue;
+    g.modalc--;
+    memmove(g.modalv+i,g.modalv+i+1,sizeof(void*)*(g.modalc-i));
+    if (modal==g.modal_focus) g.modal_focus=0;
+    modal_del(modal);
+  }
 }
+
+/* Render.
+ */
 
 void egg_client_render() {
   graf_reset(&g.graf);
   
-  // XXX testing font.
-  graf_set_input(&g.graf,g.texid_font);
-  const char *msg="Quick brown fox, lazy dog, etc.";
-  const char *p;
-  int x;
-  for (x=20,p=msg;*p;x+=8,p++) {
-    graf_tile(&g.graf,x,80,*p,0);
-    graf_tile(&g.graf,x,88,(*p)+0x80,0);
+  // Find the highest opaque modal.
+  int opaquep=-1,i=g.modalc;
+  while (i-->0) {
+    struct modal *modal=g.modalv[i];
+    if (modal->type->opaque) {
+      opaquep=i;
+      break;
+    }
+  }
+  
+  // If nothing is opaque, black out the framebuffer.
+  if (opaquep<0) {
+    graf_fill_rect(&g.graf,0,0,FBW,FBH,0x000000ff);
+    opaquep=0;
+  }
+  
+  // Render every modal from (opaquep) up.
+  for (;opaquep<g.modalc;opaquep++) {
+    struct modal *modal=g.modalv[opaquep];
+    modal->type->render(modal);
   }
 
   graf_flush(&g.graf);

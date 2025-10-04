@@ -20,10 +20,10 @@ Aim to complete by Monday evening, 6 October.
 
 ## TODO
 
-- [ ] Draw font and sub cipher.
+- [x] Draw font and sub cipher.
 - [ ] Basic skeleton.
-- - [ ] Modal stack.
-- - [ ] Map loader. Single screen maps @ 20,11.
+- - [x] Modal stack.
+- - [x] Map loader. Single screen maps @ 20,11.
 - - [ ] Sprites.
 - [ ] Graphics.
 - [ ] Dialogue.
