@@ -19,6 +19,7 @@ int egg_client_init() {
   egg_rom_get(g.rom,g.romc);
   
   if (egg_texture_load_image(g.texid_font=egg_texture_new(),RID_image_font)<0) return -1;
+  if (egg_texture_load_image(g.texid_tiles=egg_texture_new(),RID_image_tiles)<0) return -1;
 
   //TODO
 

@@ -15,6 +15,7 @@ extern struct g {
   int romc;
   struct graf graf;
   int texid_font;
+  int texid_tiles;
 } g;
 
 #endif
