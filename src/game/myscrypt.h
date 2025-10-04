@@ -8,6 +8,7 @@
 #include "egg_res_toc.h"
 #include "shared_symbols.h"
 #include "modal/modal.h"
+#include "sprite/sprite.h"
 #include "session.h"
 
 #define FBW 320
@@ -45,6 +46,8 @@ extern struct g {
   struct graf graf;
   int pvinput;
   struct session session;
+  struct sprite **spritev;
+  int spritec,spritea;
   
   struct modal *modalv[MODAL_LIMIT];
   int modalc;

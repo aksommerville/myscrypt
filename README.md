@@ -2,7 +2,7 @@
 
 Requires [Egg v2](https://github.com/aksommerville/egg2) to build.
 
-For [https://itch.io/jam/inferno-jam-2025](Inferno Jam 2025), theme "One Color".
+For [Inferno Jam 2025](https://itch.io/jam/inferno-jam-2025), theme "One Color".
 (as in, that's a literal requirement, not a theme to be interpretted).
 
 - They allow shades of the color but let's be hard-core and go strict monochrome.
@@ -21,12 +21,13 @@ Aim to complete by Monday evening, 6 October.
 ## TODO
 
 - [x] Draw font and sub cipher.
-- [ ] Basic skeleton.
+- [x] Basic skeleton.
 - - [x] Modal stack.
 - - [x] Map loader. Single screen maps @ 20,11.
-- - [ ] Sprites.
+- - [x] Sprites.
 - [ ] Graphics.
 - [ ] Dialogue.
+- [ ] Transitions.
 - [ ] Maps.
 - [ ] Music.
 - [ ] Sound effects.

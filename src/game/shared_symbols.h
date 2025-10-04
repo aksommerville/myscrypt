@@ -13,11 +13,12 @@
 #define CMD_map_image     0x20 /* u16:imageid */
 #define CMD_map_position  0x21 /* u8:horz, u8:vert */
 #define CMD_map_sprite    0x61 /* u16:position, u16:spriteid, u32:arg */
-#define CMD_map_door      0x62 /* u16:position, u16:mapid, u16:dstposition, u16:arg */
 
+#define CMD_sprite_solid 0x01
 #define CMD_sprite_image 0x20 /* u16:imageid */
 #define CMD_sprite_tile  0x21 /* u8:tileid, u8:xform */
 #define CMD_sprite_type  0x22 /* u16:sprtype */
+#define CMD_sprite_layer 0x23 /* u16:layer */
 
 #define NS_tilesheet_physics 1
 #define NS_tilesheet_family 0

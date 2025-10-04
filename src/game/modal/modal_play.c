@@ -75,22 +75,48 @@ static void play_nav(struct modal *modal,int dx,int dy) {
  */
  
 static void _play_update(struct modal *modal,double elapsed,int input,int pvinput) {
-  //XXX TEMP try loading neighbors on dpad
+  /*XXX TEMP try loading neighbors on dpad
   if ((input&EGG_BTN_LEFT)&&!(pvinput&EGG_BTN_LEFT)) play_nav(modal,-1,0);
   if ((input&EGG_BTN_RIGHT)&&!(pvinput&EGG_BTN_RIGHT)) play_nav(modal,1,0);
   if ((input&EGG_BTN_UP)&&!(pvinput&EGG_BTN_UP)) play_nav(modal,0,-1);
   if ((input&EGG_BTN_DOWN)&&!(pvinput&EGG_BTN_DOWN)) play_nav(modal,0,1);
+  /**/
+  
+  // Update sprites.
+  int i=g.spritec;
+  while (i-->0) {
+    struct sprite *sprite=g.spritev[i];
+    if (sprite->defunct) continue;
+    if (sprite->type->update) sprite->type->update(sprite,elapsed,input,pvinput);
+  }
+  
+  // Drop defunct sprites.
+  for (i=g.spritec;i-->0;) {
+    struct sprite *sprite=g.spritev[i];
+    if (!sprite->defunct) continue;
+    g.spritec--;
+    memmove(g.spritev+i,g.spritev+i+1,sizeof(void*)*(g.spritec-i));
+    sprite_del(sprite);
+  }
 }
 
 /* Render.
  */
  
 static void _play_render(struct modal *modal) {
-  graf_fill_rect(&g.graf,0,0,FBW,FBH,0x004000ff);//XXX
   //TODO transition
   graf_set_input(&g.graf,MODAL->texid_bgbits);
   graf_decal(&g.graf,0,0,0,0,FBW,FBH);
-  //TODO sprites
+  
+  graf_set_input(&g.graf,g.texid_tiles);
+  int i=0;
+  struct sprite **p=g.spritev;
+  for (;i<g.spritec;i++,p++) {
+    struct sprite *sprite=*p;
+    int dstx=(int)(sprite->x*NS_sys_tilesize);
+    int dsty=(int)(sprite->y*NS_sys_tilesize);
+    graf_tile(&g.graf,dstx,dsty,sprite->tileid,sprite->xform);
+  }
 }
 
 /* Type definition.
