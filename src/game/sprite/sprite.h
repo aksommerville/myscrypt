@@ -33,12 +33,15 @@ struct sprite_type {
  */
 void sprite_del(struct sprite *sprite);
 struct sprite *sprite_new(const struct sprite_type *type,double x,double y,uint32_t arg,int rid,const void *cmd,int cmdc);
+void sprites_handoff(struct sprite *sprite); // Return a sprite that you stole from the global list -- modal_play does this with the hero during navigation.
 
 /* Use these to create a sprite.
  * Both return WEAK.
  */
 struct sprite *sprite_spawn_type(const struct sprite_type *type,double x,double y,uint32_t arg);
 struct sprite *sprite_spawn_rid(int rid,double x,double y,uint32_t arg);
+
+struct sprite *any_sprite_of_type(const struct sprite_type *type);
 
 int sprite_move(struct sprite *sprite,double dx,double dy);
 

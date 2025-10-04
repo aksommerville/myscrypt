@@ -64,6 +64,10 @@ static int sprite_list(struct sprite *sprite) {
   return 0;
 }
 
+void sprites_handoff(struct sprite *sprite) {
+  sprite_list(sprite);
+}
+
 /* Spawn with type (programmatic).
  */
  
@@ -105,6 +109,20 @@ struct sprite *sprite_spawn_rid(int rid,double x,double y,uint32_t arg) {
     return 0;
   }
   return sprite;
+}
+
+/* Any live sprite of a given type.
+ */
+ 
+struct sprite *any_sprite_of_type(const struct sprite_type *type) {
+  int i=g.spritec;
+  struct sprite **p=g.spritev;
+  for (;i-->0;p++) {
+    struct sprite *sprite=*p;
+    if (sprite->defunct) continue;
+    if (sprite->type==type) return sprite;
+  }
+  return 0;
 }
 
 /* Type by id.

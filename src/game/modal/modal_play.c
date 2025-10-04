@@ -61,26 +61,43 @@ static void _play_focus(struct modal *modal,int focus) {
 }
 
 /* Navigate.
- * TODO Is this my problem or session's?
  */
  
 static void play_nav(struct modal *modal,int dx,int dy) {
+
+  // Does the new map exist? Do nothing if not.
   struct map *nmap=map_by_position(g.session.map->lng+dx,g.session.map->lat+dy);
   if (!nmap) return;
+  
+  //TODO Prepare transition.
+  
+  // Delete all sprites except the first hero. (yoink her)
+  struct sprite *hero=0;
+  while (g.spritec>0) {
+    struct sprite *sprite=g.spritev[--g.spritec];
+    if (!hero&&(sprite->type==&sprite_type_hero)) hero=sprite;
+    else sprite_del(sprite);
+  }
+  
+  // Commit to the new map. Render bgbits.
   g.session.map=nmap;
   play_render_bgbits(modal,g.session.map->v);
+  
+  // If we have a hero, update her position and readd to the sprites list.
+  if (hero) {
+    hero->x-=dx*NS_sys_mapw;
+    hero->y-=dy*NS_sys_maph;
+    sprites_handoff(hero);
+  }
+  
+  // Spawn other sprites, etc.
+  session_run_map_commands(&g.session);
 }
 
 /* Update.
  */
  
 static void _play_update(struct modal *modal,double elapsed,int input,int pvinput) {
-  /*XXX TEMP try loading neighbors on dpad
-  if ((input&EGG_BTN_LEFT)&&!(pvinput&EGG_BTN_LEFT)) play_nav(modal,-1,0);
-  if ((input&EGG_BTN_RIGHT)&&!(pvinput&EGG_BTN_RIGHT)) play_nav(modal,1,0);
-  if ((input&EGG_BTN_UP)&&!(pvinput&EGG_BTN_UP)) play_nav(modal,0,-1);
-  if ((input&EGG_BTN_DOWN)&&!(pvinput&EGG_BTN_DOWN)) play_nav(modal,0,1);
-  /**/
   
   // Update sprites.
   int i=g.spritec;
@@ -97,6 +114,12 @@ static void _play_update(struct modal *modal,double elapsed,int input,int pvinpu
     g.spritec--;
     memmove(g.spritev+i,g.spritev+i+1,sizeof(void*)*(g.spritec-i));
     sprite_del(sprite);
+  }
+  
+  // If navigation was requested, do it.
+  if (g.session.navdx||g.session.navdy) {
+    play_nav(modal,g.session.navdx,g.session.navdy);
+    g.session.navdx=g.session.navdy=0;
   }
 }
 

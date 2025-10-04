@@ -1,0 +1,4 @@
+type (u16:sprtype)dummy
+image image:tiles
+tile 131 0
+solid

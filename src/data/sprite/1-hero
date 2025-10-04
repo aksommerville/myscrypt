@@ -1,3 +1,5 @@
 type (u16:sprtype)hero
 image image:tiles
 tile 128 0
+solid
+layer (u16)100
