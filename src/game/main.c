@@ -10,6 +10,10 @@ void egg_client_quit(int status) {
 
 int egg_client_init() {
 
+  #if DISABLE_ENCRYPTION
+    fprintf(stderr,"!!! WARNING !!! Encryption is disabled. Don't release like this.\n");
+  #endif
+
   int fbw=0,fbh=0;
   egg_texture_get_size(&fbw,&fbh,1);
   if ((fbw!=FBW)||(fbh!=FBH)) {

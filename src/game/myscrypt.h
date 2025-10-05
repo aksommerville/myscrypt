@@ -11,6 +11,11 @@
 #include "sprite/sprite.h"
 #include "session.h"
 
+/* Nonzero to print everything plaintext, and an indicator of which encryption would have been used.
+ * For testing only.
+ */
+#define DISABLE_ENCRYPTION 1
+
 #define FBW 320
 #define FBH 176
 

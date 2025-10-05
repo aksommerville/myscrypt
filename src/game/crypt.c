@@ -220,6 +220,24 @@ int encrypt_text(char *dst,int dsta,int cipher,const char *src,int srcc) {
   if (!src) return 0;
   if (srcc<0) { srcc=0; while (src[srcc]) srcc++; }
   if (!srcc) return 0;
+  
+  #if DISABLE_ENCRYPTION
+    int dstc=srcc+4;
+    if (dstc>dsta) return 0;
+    memcpy(dst,src,srcc);
+    dst[srcc+0]=' ';
+    dst[srcc+1]='(';
+    switch (cipher) {
+      case NS_cipher_plaintext:    dst[srcc+2]='-'; break;
+      case NS_cipher_substitution: dst[srcc+2]='S'; break;
+      case NS_cipher_vigenere:     dst[srcc+2]='V'; break;
+      case NS_cipher_playfair:     dst[srcc+2]='P'; break;
+      default:                     dst[srcc+2]='?'; break;
+    }
+    dst[srcc+3]=')';
+    return dstc;
+  #endif
+  
   switch (cipher) {
     case NS_cipher_plaintext: {
         if (srcc<=dsta) memcpy(dst,src,srcc);

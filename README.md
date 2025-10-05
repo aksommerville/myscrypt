@@ -44,6 +44,7 @@ Aim to complete by Monday evening, 6 October.
 - [ ] Itch page.
 - [ ] Can we prevent hero from staying in a stepping frame while dialogue runs?
 - [ ] Redraw the font simpler. Have pity on the poor player, they are going to write it all by hand.
+- [ ] Remember to turn off DISABLE_ENCRYPTION and the cheat room before releasing!
 
 ## Notes
 
