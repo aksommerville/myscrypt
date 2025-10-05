@@ -1,5 +1,9 @@
 # Mysteries of the Crypt
 
+SPOILER WARNING: If you're going to play the game, [do that first](https://aksommerville.itch.io/mysteries-of-the-crypt) and **do not read the rest of this file!**
+The fun of the game is in figuring out how to play it.
+Reading my notes or source will give it all away.
+
 Requires [Egg v2](https://github.com/aksommerville/egg2) to build.
 
 For [Inferno Jam 2025](https://itch.io/jam/inferno-jam-2025), theme "One Color".
