@@ -17,6 +17,7 @@ static int _nameable_init(struct sprite *sprite) {
   SPRITE->stringix=sprite->arg>>24;
   SPRITE->flagid=sprite->arg>>16;
   if (flag_get(SPRITE->flagid+2)) return -1; // We're already dismissed.
+  if (0)//XXX Suppress the blockage for now so i can slip past Oscar without talking to him
   switch (sprite->arg&0x0000ff00) {
     case 0x0100: sprite->x-=0.5; sprite->y-=0.5; break;
   }

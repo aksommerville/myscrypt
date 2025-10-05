@@ -52,4 +52,6 @@ const struct sprite_type *sprite_type_by_id(int sprtype);
 FOR_EACH_SPRTYPE
 #undef _
 
+void sprite_hero_get_face_direction(int *dx,int *dy,const struct sprite *sprite);
+
 #endif

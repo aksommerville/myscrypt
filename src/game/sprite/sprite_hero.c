@@ -139,3 +139,13 @@ const struct sprite_type sprite_type_hero={
   .init=_hero_init,
   .update=_hero_update,
 };
+
+/* Public: Get face direction.
+ */
+
+void sprite_hero_get_face_direction(int *dx,int *dy,const struct sprite *sprite) {
+  *dx=*dy=0;
+  if (!sprite||(sprite->type!=&sprite_type_hero)) return;
+  *dx=SPRITE->facedx;
+  *dy=SPRITE->facedy;
+}

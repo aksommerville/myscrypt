@@ -30,6 +30,7 @@ Aim to complete by Monday evening, 6 October.
 - [x] Global store.
 - [ ] Hazards.
 - [x] Password entry.
+- [x] Bump: Actuate only if the off-axis is so close to alignment, say +-0.5? I keep triggering dialogue with my toe.
 - [ ] Transitions.
 - [ ] Maps.
 - [x] Music.

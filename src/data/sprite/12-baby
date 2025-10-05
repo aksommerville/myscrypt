@@ -1,0 +1,4 @@
+type (u16:sprtype)baby
+image image:tiles
+tile 176 0
+solid

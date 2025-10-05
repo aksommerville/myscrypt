@@ -69,7 +69,16 @@ int sprite_move(struct sprite *sprite,double dx,double dy) {
     else if (dx>0.0) sprite->x=other->x-1.0;
     else if (dy<0.0) sprite->y=other->y+1.0;
     else if (dy>0.0) sprite->y=other->y-1.0;
-    if ((sprite->type==&sprite_type_hero)&&other->type->bump) other->type->bump(other,sprite);
+    if ((sprite->type==&sprite_type_hero)&&other->type->bump) {
+      const double barrel_radius=0.550;
+      if ((dx<0.0)||(dx>0.0)) {
+        double q=other->y-sprite->y;
+        if ((q>-barrel_radius)&&(q<barrel_radius)) other->type->bump(other,sprite);
+      } else {
+        double q=other->x-sprite->x;
+        if ((q>-barrel_radius)&&(q<barrel_radius)) other->type->bump(other,sprite);
+      }
+    }
     return 0;
   }
 

@@ -39,13 +39,15 @@
 #define NS_sprtype_gate 3
 #define NS_sprtype_switch 4
 #define NS_sprtype_nameable 5
+#define NS_sprtype_baby 6
 #define FOR_EACH_SPRTYPE \
   _(dummy) \
   _(hero) \
   _(npc) \
   _(gate) \
   _(switch) \
-  _(nameable)
+  _(nameable) \
+  _(baby)
   
 #define NS_flag_zero 0
 #define NS_flag_one 1
