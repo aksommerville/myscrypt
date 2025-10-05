@@ -1,0 +1,4 @@
+type (u16:sprtype)gate
+image image:tiles
+tile 137 0
+layer (u16)10

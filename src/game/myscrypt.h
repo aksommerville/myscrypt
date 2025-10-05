@@ -28,6 +28,8 @@
 // All strings for display will be shorter than this.
 #define MESSAGE_LIMIT 256
 
+#define FLAGV_SIZE 32 /* bytes. Max flag count is n*8. */
+
 struct map {
   int rid,lng,lat;
   const uint8_t *v;
@@ -54,6 +56,7 @@ extern struct g {
   struct sprite **spritev;
   int spritec,spritea;
   struct sprite *hero; // WEAK
+  uint8_t flagv[FLAGV_SIZE];
   
   struct modal *modalv[MODAL_LIMIT];
   int modalc;
@@ -75,5 +78,8 @@ int encrypt_text(char *dst,int dsta,int cipher,const char *src,int srcc);
  * We assume a tile size of 8x8.
  */
 int break_lines(struct egg_render_tile *vtxv,int vtxa,const char *src,int srcc,int x0,int y0,int wlimit);
+
+int flag_get(int flagid); // => 0|1
+int flag_set(int flagid,int v); // => nonzero if changed
 
 #endif

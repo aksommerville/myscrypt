@@ -4,7 +4,13 @@
  */
  
 int session_reset(struct session *session) {
+
+  // Clear things.
   while (g.spritec>0) sprite_del(g.spritev[--g.spritec]);
+  memset(g.flagv,0,sizeof(g.flagv));
+  g.flagv[0]=0x02; // NS_flag_one must always be set.
+  
+  // Load the first map.
   if (!(session->map=map_by_id(RID_map_start))) return -1;
   if (session_run_map_commands(session)<0) return -1;
   return 0;

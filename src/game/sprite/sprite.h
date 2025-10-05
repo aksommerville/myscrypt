@@ -27,6 +27,7 @@ struct sprite_type {
   int (*init)(struct sprite *sprite);
   void (*update)(struct sprite *sprite,double elapsed,int input,int pvinput);
   void (*bump)(struct sprite *sprite,struct sprite *bumper/*hero*/);
+  void (*flag)(struct sprite *sprite,int flagid,int v);
 };
 
 /* Don't use these directly.

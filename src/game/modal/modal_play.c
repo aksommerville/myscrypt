@@ -123,6 +123,44 @@ static void _play_update(struct modal *modal,double elapsed,int input,int pvinpu
   }
 }
 
+/* Do a forward pass of a bubble sort on the sprites, and if it strikes do a backward pass too.
+ * But that's all, oy, CPU capacity doesn't grow on trees.
+ * Since we're doing this every render, sprites can be out of order for a few frames. No big deal.
+ */
+ 
+static int spritecmp(const struct sprite *a,const struct sprite *b) {
+  if (a->layer<b->layer) return -1;
+  if (a->layer>b->layer) return 1;
+  if (a->y<b->y) return -1;
+  if (a->y>b->y) return 1;
+  return 0;
+}
+ 
+static void play_sort_sprites(struct modal *modal) {
+  if (g.spritec<2) return;
+  int i,last,done;
+  
+  for (i=0,last=g.spritec-1,done=1;i<last;i++) {
+    struct sprite *a=g.spritev[i];
+    struct sprite *b=g.spritev[i+1];
+    if (spritecmp(a,b)>0) {
+      done=0;
+      g.spritev[i]=b;
+      g.spritev[i+1]=a;
+    }
+  }
+  if (done) return;
+  
+  for (i=g.spritec-2;i>0;i--) { // sic -2 not -1: The final position is guaranteed correct by the first pass.
+    struct sprite *a=g.spritev[i];
+    struct sprite *b=g.spritev[i-1];
+    if (spritecmp(a,b)<0) {
+      g.spritev[i]=b;
+      g.spritev[i-1]=a;
+    }
+  }
+}
+
 /* Render.
  */
  
@@ -131,6 +169,7 @@ static void _play_render(struct modal *modal) {
   graf_set_input(&g.graf,MODAL->texid_bgbits);
   graf_decal(&g.graf,0,0,0,0,FBW,FBH);
   
+  play_sort_sprites(modal);
   graf_set_input(&g.graf,g.texid_tiles);
   int i=0;
   struct sprite **p=g.spritev;

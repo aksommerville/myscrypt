@@ -26,7 +26,10 @@ Aim to complete by Monday evening, 6 October.
 - - [x] Map loader. Single screen maps @ 20,11.
 - - [x] Sprites.
 - [ ] Graphics.
-- [ ] Dialogue.
+- [x] Dialogue.
+- [x] Global store.
+- [ ] Hazards.
+- [ ] Password entry.
 - [ ] Transitions.
 - [ ] Maps.
 - [ ] Music.

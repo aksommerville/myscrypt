@@ -36,9 +36,18 @@
 #define NS_sprtype_dummy 0
 #define NS_sprtype_hero 1
 #define NS_sprtype_npc 2
+#define NS_sprtype_gate 3
+#define NS_sprtype_switch 4
 #define FOR_EACH_SPRTYPE \
   _(dummy) \
   _(hero) \
-  _(npc)
+  _(npc) \
+  _(gate) \
+  _(switch)
+  
+#define NS_flag_zero 0
+#define NS_flag_one 1
+#define NS_flag_leftswitch 2
+#define NS_flag_rightswitch 3
 
 #endif
