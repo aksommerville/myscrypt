@@ -24,8 +24,10 @@ static int _npc_init(struct sprite *sprite) {
 static int npc_floppable(uint8_t tileid) {
   switch (tileid) {
     // Call out those sprites which should not face the hero, eg the signpost.
-    case 0x83:
-    case 0x84:
+    case 0x83: // box
+    case 0x84: // sign
+    case 0x93: // wiseman (facing forward but not symmetric)
+    case 0x9c: // sleeping skeleton
       return 0;
   }
   // Everything else is oriented left, and flops to face the hero on x.

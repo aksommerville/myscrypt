@@ -14,3 +14,5 @@ image image:tiles
 sprite @9,4 sprite:hero (u32)0
 position 128 128
 sprite @11,5 sprite:ghost (u16)0 (u8:cipher)substitution (u8)4
+sprite @9,9 sprite:sleepyhead (u16)0 (u8:cipher)substitution (u8)19
+sprite @17,3 sprite:skeleton (u16)0 (u8:cipher)substitution (u8)20
