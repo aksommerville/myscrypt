@@ -20,6 +20,8 @@ struct modal_password {
   int animframe;
   char name[NAME_LIMIT];
   int namec;
+  char lastguess[NAME_LIMIT];
+  int lastguessc;
 };
 
 #define MODAL ((struct modal_password*)modal)
@@ -43,30 +45,43 @@ static int _password_init(struct modal *modal) {
 static void _password_focus(struct modal *modal,int focus) {
 }
 
+/* Canonicalize a name.
+ * Strip all space (not just leading and trailing), and force upper-case.
+ */
+ 
+static int password_canonicalize(char *dst,int dsta,const char *src,int srcc) {
+  int dstc=0,srcp=0;
+  for (;srcp<srcc;srcp++) {
+    char ch=src[srcp];
+    if ((unsigned char)ch<=0x20) continue;
+    if (dstc>=dsta) return 0;
+    if ((ch>=0x61)&&(ch<=0x7a)) ch-=0x20;
+    dst[dstc++]=ch;
+  }
+  return dstc;
+}
+
 /* Submit name.
  */
  
 static void password_submit_name(struct modal *modal) {
-  
-  // Trim spaces. It's easy to enough to add them by accident and the true name will never have outer space.
-  const char *guess=MODAL->name;
-  int guessc=MODAL->namec;
-  while (guessc&&((unsigned char)guess[guessc-1]<=0x20)) guessc--;
-  while (guessc&&((unsigned char)guess[0]<=0x20)) { guess++; guessc--; }
-  
-  // Acquire the True Name. Note that these are mixed-case in the source, intentionally, but we must force upper-case.
-  const char *truename_pre=0;
-  int truenamec=get_string(&truename_pre,1,MODAL->name_stringix);
+
+  char guess[NAME_LIMIT];
   char truename[NAME_LIMIT];
-  if (truenamec>sizeof(truename)) {
-    fprintf(stderr,"Beast name '%.*s' is longer than the allowed %d.\n",truenamec,truename_pre,NAME_LIMIT);
+  int guessc=password_canonicalize(guess,sizeof(guess),MODAL->name,MODAL->namec);
+  
+  // If they guess the same thing twice, reject it. Ditto if it's all spaces.
+  if (!guessc||((guessc==MODAL->lastguessc)&&!memcmp(guess,MODAL->lastguess,guessc))) {
+    egg_play_sound(RID_sound_ui_reject,1.0,0.0);
     return;
   }
-  int i=truenamec; while (i-->0) {
-    char ch=truename_pre[i];
-    if ((ch>=0x61)&&(ch<=0x7a)) truename[i]=ch-0x20;
-    else truename[i]=ch;
-  }
+  memcpy(MODAL->lastguess,guess,guessc);
+  MODAL->lastguessc=guessc;
+  
+  // Acquire the True Name.
+  const char *truename_pre=0;
+  int truenamec=get_string(&truename_pre,1,MODAL->name_stringix);
+  truenamec=password_canonicalize(truename,sizeof(truename),truename_pre,truenamec);
   
   // TODO Would like some livelier animation after a guess, both wrong and right.
   // If she guessed right, set the "gone" flag and dismiss the modal.
