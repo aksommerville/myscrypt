@@ -40,7 +40,8 @@ Aim to complete by Monday evening, 6 October.
 - [x] Music.
 - [ ] Sound effects.
 - [ ] Hello modal.
-- [ ] Gameover modal.
+- [x] Gameover modal.
+- [ ] Password modal: Don't allow to submit the same name twice in a row. Also, strip all spaces when canonicalizing ("OSCARFINGER" should be fine)
 - [ ] Itch page.
 - [ ] Can we prevent hero from staying in a stepping frame while dialogue runs?
 - [x] Redraw the font simpler. Have pity on the poor player, they are going to write it all by hand.

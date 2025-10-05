@@ -57,7 +57,6 @@ void session_navigate_soon(struct session *session,int dx,int dy) {
 /* End game.
  */
  
-void game_over(int win) {
-  fprintf(stderr,"%s:%s %s\n",__FILE__,__func__,win?"WIN":"LOSE");//TODO
-  egg_terminate(0);
+void game_over(int disposition) {
+  modal_spawn_gameover(disposition);
 }

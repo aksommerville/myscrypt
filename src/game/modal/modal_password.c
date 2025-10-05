@@ -83,7 +83,7 @@ static void password_submit_name(struct modal *modal) {
     } else if (!flag_get(MODAL->flagid0+1)) {
       flag_set(MODAL->flagid0+1,1);
     } else {
-      game_over(0);
+      game_over(GAME_OVER_NAMED_BEAST);
     }
   }
 }

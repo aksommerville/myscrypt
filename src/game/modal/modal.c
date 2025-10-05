@@ -39,3 +39,11 @@ struct modal *modal_spawn(const struct modal_type *type) {
   g.modal_focus=0; // XXX I gave modals a "focus" hook but now thinking we won't need it. Come back here if we do.
   return modal;
 }
+
+/* Defunct all modals.
+ */
+
+void modal_defunct_all() {
+  int i=g.modalc;
+  while (i-->0) g.modalv[i]->defunct=1;
+}

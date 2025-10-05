@@ -87,6 +87,11 @@ int break_lines(struct egg_render_tile *vtxv,int vtxa,const char *src,int srcc,i
 int flag_get(int flagid); // => 0|1
 int flag_set(int flagid,int v); // => nonzero if changed
 
-void game_over(int win);
+/* The disposition of gameover is either WIN or the thing that ate you.
+ */
+#define GAME_OVER_WIN 1
+#define GAME_OVER_NAMED_BEAST 2
+#define GAME_OVER_CHANGELING 3
+void game_over(int disposition);
 
 #endif

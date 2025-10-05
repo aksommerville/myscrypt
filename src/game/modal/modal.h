@@ -38,6 +38,9 @@ struct modal *modal_new(const struct modal_type *type);
  */
 struct modal *modal_spawn(const struct modal_type *type);
 
+// Caller should spawn one right after, otherwise we're not wearing any pants.
+void modal_defunct_all();
+
 extern const struct modal_type modal_type_play;
 extern const struct modal_type modal_type_dialogue; // overlay of play
 extern const struct modal_type modal_type_password; // ''
@@ -46,5 +49,6 @@ extern const struct modal_type modal_type_gameover;
 
 struct modal *modal_spawn_dialogue(uint8_t cipher,uint8_t stringix);
 struct modal *modal_spawn_password(uint8_t tileid,uint8_t stringix,uint8_t flagid); // tile for outerworld. two flags
+struct modal *modal_spawn_gameover(int disposition);
 
 #endif

@@ -140,8 +140,8 @@ static void _baby_update(struct sprite *sprite,double elapsed,int input,int pvin
 
 static void _baby_bump(struct sprite *sprite,struct sprite *bumper) {
   switch (SPRITE->role) {
-    case ROLE_HUMAN: game_over(1); break;
-    case ROLE_DEMON: game_over(0); break;
+    case ROLE_HUMAN: game_over(GAME_OVER_WIN); break;
+    case ROLE_DEMON: game_over(GAME_OVER_CHANGELING); break;
   }
 }
 
