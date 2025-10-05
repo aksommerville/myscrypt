@@ -32,7 +32,7 @@ Aim to complete by Monday evening, 6 October.
 - [x] Graphics.
 - [x] Dialogue.
 - [x] Global store.
-- [ ] Hazards.
+- [x] Hazards.
 - [x] Password entry.
 - [x] Bump: Actuate only if the off-axis is so close to alignment, say +-0.5? I keep triggering dialogue with my toe.
 - [ ] Transitions.
@@ -45,7 +45,7 @@ Aim to complete by Monday evening, 6 October.
 - [ ] Itch page.
 - [ ] Can we prevent hero from staying in a stepping frame while dialogue runs?
 - [x] Redraw the font simpler. Have pity on the poor player, they are going to write it all by hand.
-- [ ] Remember to turn off DISABLE_ENCRYPTION and the cheat room before releasing!
+- [x] Remember to turn off DISABLE_ENCRYPTION and the cheat room before releasing!
 
 ## Notes
 

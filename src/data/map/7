@@ -13,3 +13,4 @@
 image image:tiles
 position 129 127
 sprite @6,5 sprite:skeleton (u16)0 (u8:cipher)playfair (u8)18
+sprite @11,4 sprite:firepot (u32)0

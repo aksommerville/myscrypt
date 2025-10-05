@@ -13,3 +13,4 @@
 image image:tiles
 position 125 131
 sprite @4,5 sprite:skeleton (u16)0 (u8:cipher)substitution (u8)11
+sprite @7,1 sprite:firepot (u32)0

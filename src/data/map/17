@@ -15,3 +15,4 @@ position 126 129
 sprite @15,2 sprite:gate (u8:flag)maze_switch_9 (u8)1 (u16)0
 sprite @4,2 sprite:gate (u8:flag)maze_switch_7 (u8)0 (u16)0
 sprite @9,3 sprite:gate (u8:flag)maze_switch_8 (u8)1 (u16)0
+sprite @9,7 sprite:firepot (u32)0

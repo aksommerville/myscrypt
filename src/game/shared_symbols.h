@@ -40,6 +40,8 @@
 #define NS_sprtype_switch 4
 #define NS_sprtype_nameable 5
 #define NS_sprtype_baby 6
+#define NS_sprtype_firepot 7
+#define NS_sprtype_fireball 8
 #define FOR_EACH_SPRTYPE \
   _(dummy) \
   _(hero) \
@@ -47,7 +49,9 @@
   _(gate) \
   _(switch) \
   _(nameable) \
-  _(baby)
+  _(baby) \
+  _(firepot) \
+  _(fireball)
   
 #define NS_flag_zero 0
 #define NS_flag_one 1

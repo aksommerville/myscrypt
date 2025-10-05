@@ -92,6 +92,7 @@ int flag_set(int flagid,int v); // => nonzero if changed
 #define GAME_OVER_WIN 1
 #define GAME_OVER_NAMED_BEAST 2
 #define GAME_OVER_CHANGELING 3
+#define GAME_OVER_DEAD 4 /* unspecified assailant */
 void game_over(int disposition);
 
 #endif

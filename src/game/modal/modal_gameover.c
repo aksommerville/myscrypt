@@ -117,6 +117,7 @@ struct modal *modal_spawn_gameover(int disposition) {
     case GAME_OVER_WIN: strix=21; break;
     case GAME_OVER_NAMED_BEAST: strix=22; break;
     case GAME_OVER_CHANGELING: strix=23; break;
+    case GAME_OVER_DEAD: strix=28; break;
     default: strix=24; break;
   }
   const char *src=0;

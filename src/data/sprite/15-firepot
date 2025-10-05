@@ -1,0 +1,4 @@
+type (u16:sprtype)firepot
+image image:tiles
+tile 157 0
+solid

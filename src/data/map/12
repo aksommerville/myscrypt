@@ -16,3 +16,4 @@ sprite @15,7 sprite:switch (u8:flag)maze_switch_3 (u24)0
 sprite @4,8 sprite:switch (u8:flag)maze_switch_1 (u24)0
 sprite @9,7 sprite:switch (u8:flag)maze_switch_2 (u24)0
 sprite @5,1 sprite:wiseman (u16)0 (u8:cipher)substitution (u8)15
+sprite @2,6 sprite:firepot (u32)0

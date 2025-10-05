@@ -12,3 +12,4 @@
 
 image image:tiles
 position 123 129
+sprite @12,8 sprite:firepot (u32)0

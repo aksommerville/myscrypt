@@ -13,3 +13,4 @@
 image image:tiles
 position 127 127
 sprite @12,5 sprite:skeleton (u16)0 (u8:cipher)vigenere (u8)17
+sprite @11,7 sprite:firepot (u32)0
