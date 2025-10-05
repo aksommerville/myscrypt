@@ -1,0 +1,37 @@
+2121212121212121212121212113313131313114
+2121212121212121212121212122000000000020
+2121212121212121212121212122000000000020
+2121212121212121212121212122000000000020
+2121212121212121212121212122000000000020
+2121212121133131313131313132000000000020
+2121212121220000000000000000000000000020
+3131311421220000000010111112000000000020
+0000003031320000000020212122000000000020
+0000000000000000000020212122000000000020
+1111111111111111111124212123111111111124
+
+image image:tiles
+position 129 128
+sprite @16,2 sprite:sign (u16)0 (u8:cipher)substitution (u8)12
+sprite @17,8 sprite:wiseman (u16)0 (u8:cipher)substitution (u8)16
+sprite @13,6 sprite:gate (u8:flag)switchroom4 (u8)1 (u16)0
+sprite @10,6 sprite:gate (u8:flag)switchroom1 (u8)0 (u16)0
+sprite @11,6 sprite:gate (u8:flag)switchroom2 (u8)1 (u16)0
+sprite @12,6 sprite:gate (u8:flag)switchroom3 (u8)0 (u16)0
+
+sprite @6,6 sprite:switch (u8:flag)switchroom1 (u24)0
+sprite @7,6 sprite:switch (u8:flag)switchroom2 (u24)0
+sprite @8,6 sprite:switch (u8:flag)switchroom3 (u24)0
+sprite @9,6 sprite:switch (u8:flag)switchroom4 (u24)0
+sprite @6,7 sprite:switch (u8:flag)switchroom2 (u24)0
+sprite @7,7 sprite:switch (u8:flag)switchroom3 (u24)0
+sprite @8,7 sprite:switch (u8:flag)switchroom4 (u24)0
+sprite @9,7 sprite:switch (u8:flag)switchroom1 (u24)0
+sprite @6,8 sprite:switch (u8:flag)switchroom3 (u24)0
+sprite @7,8 sprite:switch (u8:flag)switchroom4 (u24)0
+sprite @8,8 sprite:switch (u8:flag)switchroom1 (u24)0
+sprite @9,8 sprite:switch (u8:flag)switchroom2 (u24)0
+sprite @6,9 sprite:switch (u8:flag)switchroom4 (u24)0
+sprite @7,9 sprite:switch (u8:flag)switchroom1 (u24)0
+sprite @8,9 sprite:switch (u8:flag)switchroom2 (u24)0
+sprite @9,9 sprite:switch (u8:flag)switchroom3 (u24)0

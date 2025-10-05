@@ -12,3 +12,4 @@
 
 image image:tiles
 position 129 126
+sprite @8,7 sprite:sign (u16)0 (u8:cipher)playfair (u8)14

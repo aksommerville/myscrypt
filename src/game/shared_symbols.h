@@ -72,5 +72,9 @@
 #define NS_flag_maze_switch_7 20
 #define NS_flag_maze_switch_8 21
 #define NS_flag_maze_switch_9 22
+#define NS_flag_switchroom1 23
+#define NS_flag_switchroom2 24
+#define NS_flag_switchroom3 25
+#define NS_flag_switchroom4 26
 
 #endif

@@ -12,3 +12,4 @@
 
 image image:tiles
 position 127 126
+sprite @10,6 sprite:sign (u16)0 (u8:cipher)vigenere (u8)13
