@@ -5,6 +5,10 @@
  
 int session_reset(struct session *session) {
 
+  egg_play_song(RID_song_in_tongues,0,1);
+  //egg_play_song(RID_song_lets_brew_potions,0,1); // <-- hello
+  //egg_play_song(RID_song_frolic_in_the_dew,0,1); // <-- gameover
+
   // Clear things.
   while (g.spritec>0) sprite_del(g.spritev[--g.spritec]);
   memset(g.flagv,0,sizeof(g.flagv));

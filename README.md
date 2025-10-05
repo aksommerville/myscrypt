@@ -32,7 +32,7 @@ Aim to complete by Monday evening, 6 October.
 - [ ] Password entry.
 - [ ] Transitions.
 - [ ] Maps.
-- [ ] Music.
+- [x] Music.
 - [ ] Sound effects.
 - [ ] Hello modal.
 - [ ] Gameover modal.
