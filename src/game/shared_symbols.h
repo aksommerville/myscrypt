@@ -28,10 +28,17 @@
 #define NS_physics_vacant 0
 #define NS_physics_solid 1
 
+#define NS_cipher_plaintext 0
+#define NS_cipher_substitution 1
+#define NS_cipher_vigenere 2
+#define NS_cipher_playfair 3
+
 #define NS_sprtype_dummy 0
 #define NS_sprtype_hero 1
+#define NS_sprtype_npc 2
 #define FOR_EACH_SPRTYPE \
   _(dummy) \
-  _(hero)
+  _(hero) \
+  _(npc)
 
 #endif

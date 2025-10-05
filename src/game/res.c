@@ -148,3 +148,23 @@ int res_get(void *dstpp,int tid,int rid) {
   *(const void**)dstpp=res->v;
   return res->c;
 }
+
+/* Get string.
+ */
+ 
+int get_string(void *dstpp,int rid,int ix) {
+  if (rid<0x40) rid|=egg_prefs_get(EGG_PREF_LANG)<<6;
+  const void *serial=0;
+  int serialc=res_get(&serial,EGG_TID_strings,rid);
+  if (serialc<1) return 0;
+  struct strings_reader reader;
+  if (strings_reader_init(&reader,serial,serialc)<0) return 0;
+  struct strings_entry string;
+  while (strings_reader_next(&string,&reader)>0) {
+    if (string.index<ix) continue;
+    if (string.index>ix) break;
+    *(const void**)dstpp=string.v;
+    return string.c;
+  }
+  return 0;
+}

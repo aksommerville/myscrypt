@@ -23,6 +23,10 @@ int egg_client_init() {
   if (egg_texture_load_image(g.texid_tiles=egg_texture_new(),RID_image_tiles)<0) return -1;
   
   srand_auto();
+  
+  //TODO Do we need some mechanism for changing the keys? For now, they are constant.
+  g.vigenere_key="OCTOPUS"; g.vigenere_keyc=7;
+  g.playfair_key="PINEAPPLE"; g.playfair_keyc=9;
 
   if (session_reset(&g.session)<0) return -1;
   if (!modal_spawn(&modal_type_play)) return -1;

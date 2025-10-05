@@ -25,6 +25,9 @@
 
 #define MODAL_LIMIT 8
 
+// All strings for display will be shorter than this.
+#define MESSAGE_LIMIT 256
+
 struct map {
   int rid,lng,lat;
   const uint8_t *v;
@@ -42,12 +45,15 @@ extern struct g {
   int resc,resa;
   struct map mapv[WORLD_MAP_SIZE];
   uint8_t physics[256];
+  const char *vigenere_key,*playfair_key;
+  int vigenere_keyc,playfair_keyc;
   
   struct graf graf;
   int pvinput;
   struct session session;
   struct sprite **spritev;
   int spritec,spritea;
+  struct sprite *hero; // WEAK
   
   struct modal *modalv[MODAL_LIMIT];
   int modalc;
@@ -59,5 +65,15 @@ int res_search(int tid,int rid);
 int res_get(void *dstpp,int tid,int rid);
 struct map *map_by_id(int rid);
 struct map *map_by_position(int lng,int lat);
+int get_string(void *dstpp,int rid,int ix);
+
+int encrypt_text(char *dst,int dsta,int cipher,const char *src,int srcc);
+
+/* Produce an array of tile vertices for the given text.
+ * We not not produce vertices for 0x20 or below (though technically we could).
+ * (x0,y0) is the center of the first tile.
+ * We assume a tile size of 8x8.
+ */
+int break_lines(struct egg_render_tile *vtxv,int vtxa,const char *src,int srcc,int x0,int y0,int wlimit);
 
 #endif

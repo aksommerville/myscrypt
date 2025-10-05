@@ -34,3 +34,20 @@ Aim to complete by Monday evening, 6 October.
 - [ ] Hello modal.
 - [ ] Gameover modal.
 - [ ] Itch page.
+- [ ] Can we prevent hero from staying in a stepping frame while dialogue runs?
+- [ ] Redraw the font simpler. Have pity on the poor player, they are going to write it all by hand.
+
+## Notes
+
+Ensure that we implement Vigenere and Playfair exactly as Wikipedia describes them, so users have a chance.
+
+https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher
+ - Key index is zero-based.
+ - Add to encrypt, subtract to decrypt.
+ - Offer this hint, that Wikipedia page is the first Google hit: "le chiffrage indechiffrable"
+ 
+https://en.wikipedia.org/wiki/Playfair_cipher
+ - Replace J with I -- need to hint this.
+ - Spiral from the upper left -- need to hint this.
+ - Use X for parity and pair-breaking -- should hint this.
+ - This Wikipedia page is only the third Google hit for "playfair". Maybe something more precise?

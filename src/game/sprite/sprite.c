@@ -5,6 +5,7 @@
  
 void sprite_del(struct sprite *sprite) {
   if (!sprite) return;
+  if (sprite==g.hero) g.hero=0;
   if (sprite->type->del) sprite->type->del(sprite);
   free(sprite);
 }
@@ -61,6 +62,7 @@ static int sprite_list(struct sprite *sprite) {
     g.spritea=na;
   }
   g.spritev[g.spritec++]=sprite;
+  if (!g.hero&&(sprite->type==&sprite_type_hero)) g.hero=sprite;
   return 0;
 }
 

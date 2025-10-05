@@ -36,5 +36,6 @@ struct modal *modal_spawn(const struct modal_type *type) {
     return 0;
   }
   g.modalv[g.modalc++]=modal; // HANDOFF
+  g.modal_focus=0; // XXX I gave modals a "focus" hook but now thinking we won't need it. Come back here if we do.
   return modal;
 }
