@@ -38,7 +38,7 @@ Aim to complete by Monday evening, 6 October.
 - [ ] Transitions.
 - [x] Maps.
 - [x] Music.
-- [ ] Sound effects.
+- [x] Sound effects.
 - [ ] Hello modal.
 - [x] Gameover modal.
 - [ ] Password modal: Don't allow to submit the same name twice in a row. Also, strip all spaces when canonicalizing ("OSCARFINGER" should be fine)
@@ -61,3 +61,31 @@ https://en.wikipedia.org/wiki/Playfair_cipher
  - Spiral from the upper left -- need to hint this.
  - Use X for parity and pair-breaking -- should hint this.
  - This Wikipedia page is only the third Google hit for "playfair". Maybe something more precise?
+ 
+## Hints
+
+Transcribe these for the Itch page, and hide under disclosure elements with lots of "hey you're ruining your own fun!".
+
+- All text in the first two rooms (where you start, and the screen just north of it) can be deciphered with nothing else.
+- If you're struggling with that: Look at the apostrophes, look for one and two letter words. It's very solvable.
+- Include the sub-cipher cheat sheet.
+- To complete the maze, you'll need to throw the appropriate switches on the north row.
+- Touch each of these switches once: East room: middle, right. Middle room: Left, right. West room: Left, right.
+- Once the switches are opened, follow the outside edge of the maze to reach the goal.
+- There's a skeleton you ought to talk to in the maze; take the northern fork at the southeast corner.
+- The three guard monsters will vanish if you say their name.
+- The vulture's name can be found in the maze (west of start).
+- It's "VINCENT".
+- The penguin's name can be found east of start.
+- It's "PENELOPE".
+- The eyeball's name is in two pieces, guarded by vulture and penguin.
+- It's "OSCAR FINGER".
+- In the vulture's room, use the substitution cipher as before, and then a Vigenere cipher. (Google it for the algorithm, and you'll need a key too).
+- The Vigenere key is provided by the wise man in the maze, by the switches on the north end.
+- It's "OCTOPUS".
+- In the penguin's room, use a Playfair cipher.
+- Playfair ciphers depend on two conventions: order of filling the key sheet, and which letter to drop. Those are both given to you in the penguin's room.
+- The Playfair key is provided in the east-of-start room where you learned the penguin's name.
+- It's "PINEAPPLE".
+- Only one baby is real. Touching any of the others will kill you. The real one is selected randomly each time you enter the room.
+- The real baby will turn away when you look at it. (this is explained by a skeleton in the maze).
