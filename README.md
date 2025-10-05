@@ -39,7 +39,7 @@ Aim to complete by Monday evening, 6 October.
 - [x] Maps.
 - [x] Music.
 - [x] Sound effects.
-- [ ] Hello modal.
+- [x] Hello modal.
 - [x] Gameover modal.
 - [x] Password modal: Don't allow to submit the same name twice in a row. Also, strip all spaces when canonicalizing ("OSCARFINGER" should be fine)
 - [ ] Itch page.

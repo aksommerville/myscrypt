@@ -49,8 +49,7 @@ static void _gameover_update(struct modal *modal,double elapsed,int input,int pv
     } else {
       modal->defunct=1;
       modal_defunct_all();
-      session_reset(&g.session);
-      modal_spawn(&modal_type_play);
+      modal_spawn(&modal_type_hello);
     }
   }
   
