@@ -45,5 +45,6 @@ extern const struct modal_type modal_type_hello;
 extern const struct modal_type modal_type_gameover;
 
 struct modal *modal_spawn_dialogue(uint8_t cipher,uint8_t stringix);
+struct modal *modal_spawn_password(uint8_t tileid,uint8_t stringix,uint8_t flagid); // tile for outerworld. two flags
 
 #endif

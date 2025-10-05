@@ -13,9 +13,3 @@
 image image:tiles
 sprite @9,4 sprite:hero (u32)0
 position 128 128
-sprite @4,7 sprite:box (u32)0
-sprite @14,3 sprite:box (u32)0
-sprite @12,8 sprite:goblin (u16)0 (u8:cipher)playfair (u8)5
-sprite @7,2 sprite:sign (u16)0 (u8:cipher)substitution (u8)6
-sprite @10,6 sprite:skeleton (u16)0 (u8:cipher)vigenere (u8)4
-sprite @6,8 sprite:sign (u16)0 (u8:cipher)plaintext (u8)3

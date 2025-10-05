@@ -38,16 +38,28 @@
 #define NS_sprtype_npc 2
 #define NS_sprtype_gate 3
 #define NS_sprtype_switch 4
+#define NS_sprtype_nameable 5
 #define FOR_EACH_SPRTYPE \
   _(dummy) \
   _(hero) \
   _(npc) \
   _(gate) \
-  _(switch)
+  _(switch) \
+  _(nameable)
   
 #define NS_flag_zero 0
 #define NS_flag_one 1
 #define NS_flag_leftswitch 2
 #define NS_flag_rightswitch 3
+#define NS_flag_maze_exit 4
+#define NS_flag_name_vulture_1 5
+#define NS_flag_name_vulture_2 6
+#define NS_flag_vulture_gone 7
+#define NS_flag_name_penguin_1 8
+#define NS_flag_name_penguin_2 9
+#define NS_flag_penguin_gone 10
+#define NS_flag_name_eyeball_1 11
+#define NS_flag_name_eyeball_2 12
+#define NS_flag_eyeball_gone 13
 
 #endif

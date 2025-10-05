@@ -53,3 +53,11 @@ void session_navigate_soon(struct session *session,int dx,int dy) {
   session->navdx=dx;
   session->navdy=dy;
 }
+
+/* End game.
+ */
+ 
+void game_over(int win) {
+  fprintf(stderr,"%s:%s %s\n",__FILE__,__func__,win?"WIN":"LOSE");//TODO
+  egg_terminate(0);
+}

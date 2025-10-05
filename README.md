@@ -29,7 +29,7 @@ Aim to complete by Monday evening, 6 October.
 - [x] Dialogue.
 - [x] Global store.
 - [ ] Hazards.
-- [ ] Password entry.
+- [x] Password entry.
 - [ ] Transitions.
 - [ ] Maps.
 - [x] Music.

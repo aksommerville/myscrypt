@@ -12,7 +12,7 @@
 
 image image:tiles
 position 128 127
-sprite @16,4 sprite:gate (u8:flag)rightswitch (u8)1 (u16)0
-sprite @3,4 sprite:gate (u8:flag)leftswitch (u8)0 (u16)0
-sprite @14,7 sprite:switch (u8:flag)rightswitch (u24)0
-sprite @5,6 sprite:switch (u8:flag)leftswitch (u24)0
+sprite @10,2 sprite:eyeball (u8)10 (u8:flag)name_eyeball_1 (u8)1 (u8)0
+sprite @3,4 sprite:vulture (u8)8 (u8:flag)name_vulture_1 (u16)0
+sprite @16,4 sprite:penguin (u8)9 (u8:flag)name_penguin_1 (u16)0
+sprite @5,7 sprite:wiseman (u16)0 (u8:cipher)substitution (u8)3

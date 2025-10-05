@@ -175,6 +175,7 @@ static void _play_render(struct modal *modal) {
   struct sprite **p=g.spritev;
   for (;i<g.spritec;i++,p++) {
     struct sprite *sprite=*p;
+    if (sprite->defunct) continue; // Won't come up normally, but can happen if a sprite defuncts via some other modal (eg Named Beasts)
     int dstx=(int)(sprite->x*NS_sys_tilesize);
     int dsty=(int)(sprite->y*NS_sys_tilesize);
     graf_tile(&g.graf,dstx,dsty,sprite->tileid,sprite->xform);

@@ -1,0 +1,4 @@
+type (u16:sprtype)npc
+image image:tiles
+tile 147 0
+solid
