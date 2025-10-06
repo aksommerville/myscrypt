@@ -23,7 +23,7 @@ static int letter_index(unsigned char ch) {
  */
  
 static char apply_sub(char src) {
-  if (g.sub_alphabet&&g.sub_alphabet[0]) {
+  if (g.sub_alphabet[0]) {
     if ((src>=0x61)&&(src<=0x7a)) src-=0x20; // Force uppercase. Our fonts have identical upper and lower glyphs, so this is always safe.
     if ((src<0x41)||(src>0x5a)) return src; // Anything that isn't a letter, return it verbatim. Punctuation is identical between the plain and cipher fonts.
     src-=0x41; // 0..25

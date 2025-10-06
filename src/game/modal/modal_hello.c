@@ -89,7 +89,8 @@ static void _hello_update(struct modal *modal,double elapsed,int input,int pvinp
   if ((input&EGG_BTN_SOUTH)&&!(pvinput&EGG_BTN_SOUTH)) {
     if (MODAL->all_correct) {
       modal_defunct_all();
-      session_reset(&g.session);
+      // CONSTANT VARIABLE RESTORE STUPID NOCRYPT. TODO let the user pick
+      session_reset(&g.session,SESSION_START_CONSTANT);
       modal_spawn(&modal_type_play);
     } else {
       hello_finish_animation(modal);

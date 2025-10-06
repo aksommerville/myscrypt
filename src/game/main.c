@@ -22,25 +22,9 @@ int egg_client_init() {
   if (egg_texture_load_image(g.texid_font=egg_texture_new(),RID_image_font)<0) return -1;
   if (egg_texture_load_image(g.texid_tiles=egg_texture_new(),RID_image_tiles)<0) return -1;
   
-  srand_auto();
+  load_saved_game();
   
-  //TODO Randomize and persist cipher config.
-  g.vigenere_key="OCTOPUS"; g.vigenere_keyc=7;
-  g.playfair_key="PINEAPPLE"; g.playfair_keyc=9;
-  g.sub_alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  g.vulture_name="VINCENT"; g.vulture_namec=7;
-  g.penguin_name="PENELOPE"; g.penguin_namec=8;
-  g.eyeball_first_name="OSCAR"; g.eyeball_first_namec=5;
-  g.eyeball_last_name="FINGER"; g.eyeball_last_namec=6;
-  /**
-  g.vigenere_key="FLAMBEAU"; g.vigenere_keyc=8;
-  g.playfair_key="FERRIS"; g.playfair_keyc=6;
-  g.sub_alphabet=0;
-  g.vulture_name="TEDDY"; g.vulture_namec=5;
-  g.penguin_name="VICKY"; g.penguin_namec=5;
-  g.eyeball_first_name="WALTER"; g.eyeball_first_namec=6;
-  g.eyeball_last_name="BUCKET"; g.eyeball_last_namec=6;
-  /**/
+  srand_auto();
 
   if (!modal_spawn(&modal_type_hello)) return -1;
 
@@ -92,6 +76,12 @@ void egg_client_update(double elapsed) {
     memmove(g.modalv+i,g.modalv+i+1,sizeof(void*)*(g.modalc-i));
     if (modal==g.modal_focus) g.modal_focus=0;
     modal_del(modal);
+  }
+  
+  // Save if dirty.
+  if (g.save_dirty) {
+    g.save_dirty=0;
+    save_game();
   }
 }
 

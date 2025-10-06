@@ -7,10 +7,9 @@
 6 Down here we play fair, but up there they Playfair. It's not fair.
 7 The vulture's name is "{VULTURE}".
 
-# Names of Named Beasts -- TODO
-8 Vincent
-9 Penelope
-10 Oscar Finger
+8 
+9 
+10 
 
 11 A real human child will turn away when you look at it.
 12 The penguin's name is "{PENGUIN}".
@@ -33,3 +32,45 @@
 27 October 2025
 
 28 "Alas you have fallen in combat.\nGame over"
+
+# Options for Vigenere key.
+29 OCTOPUS
+30 FAMILIAR
+31 ZOMBIE
+32 WAFFLE
+
+# Options for Playfair key. Do not use J.
+33 PINEAPPLE
+34 INTESTINE
+35 LIMESTONE
+36 BADGER
+
+# Options for Vulture's name. More than 3, because the player gets 3 guesses.
+37 VINCENT
+38 HECTOR
+39 THOMAS
+40 MARTIN
+41 JAY
+42 LINUS
+
+# Options for Penguin's name. More than 3, because the player gets 3 guesses.
+43 PENELOPE
+44 VICTORIA
+45 ADELE
+46 LOUISE
+47 PATRICIA
+48 GRACE
+
+# Options for Eyeball's first name.
+49 OSCAR
+50 WALTER
+51 NORBERT
+52 JIMMY
+53 HANK
+
+# Options for Eyeball's last name. Do not use J or doubled letters, and ensure it has an even length, so it encrypts gracefully in Playfair.
+54 FINGER
+55 NUTMEG
+56 PRINCE
+57 BARTON
+58 PENCIL

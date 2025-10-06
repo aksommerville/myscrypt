@@ -54,10 +54,13 @@ extern struct g {
    * (vigenere_key,playfair_key) disable the cipher if empty.
    * (*_name) aren't relevant to encryption but they're being configured similarly.
    */
-  const char *vigenere_key,*playfair_key,*sub_alphabet;
+  char sub_alphabet[26]; // One each of 'A'..'Z', or a NUL in the first position to disable.
+  const char *vigenere_key,*playfair_key;
   int vigenere_keyc,playfair_keyc;
   const char *vulture_name,*penguin_name,*eyeball_first_name,*eyeball_last_name;
   int vulture_namec,penguin_namec,eyeball_first_namec,eyeball_last_namec;
+  char extratext[1024]; // For storing text off the saved game, for the strings above.
+  int extratextc;
   
   struct graf graf;
   int pvinput;
@@ -66,6 +69,7 @@ extern struct g {
   int spritec,spritea;
   struct sprite *hero; // WEAK
   uint8_t flagv[FLAGV_SIZE];
+  int save_dirty; // Set nonzero and main will save at the next reasonable opportunity.
   
   struct modal *modalv[MODAL_LIMIT];
   int modalc;
@@ -95,6 +99,8 @@ int break_lines(struct egg_render_tile *vtxv,int vtxa,const char *src,int srcc,i
 
 int flag_get(int flagid); // => 0|1
 int flag_set(int flagid,int v); // => nonzero if changed
+void load_saved_game();
+void save_game();
 
 /* The disposition of gameover is either WIN or the thing that ate you.
  */
@@ -103,5 +109,16 @@ int flag_set(int flagid,int v); // => nonzero if changed
 #define GAME_OVER_CHANGELING 3
 #define GAME_OVER_DEAD 4 /* unspecified assailant */
 void game_over(int disposition);
+
+/* Saved game:
+ * Key "save".
+ * Content is semicolon-delimited fields: FLAGS ; ALPHABET ; VIG_KEY ; PF_KEY ; VULTURE ; PENGUIN ; EYEBALL1 ; EYEBALL2
+ * FLAGS is hexadecimal with trailing zeroes omitted.
+ * Everything else is verbatim text.
+ *
+ * We will eagerly load the saved game at init, and save it at unspecified intervals during play.
+ * So the Hello modal can just check NS_flag_valid to know whether a save exists, and truely saved games are equivalent to "the last session, before i died".
+ * The only time Continue should *not* be an option is when the program first loads and there was no save.
+ */
 
 #endif

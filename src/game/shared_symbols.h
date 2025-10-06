@@ -55,7 +55,7 @@
   
 #define NS_flag_zero 0
 #define NS_flag_one 1
-#define NS_flag_leftswitch 2 /*available*/
+#define NS_flag_valid 2 /* Goes nonzero at session start. For detecting resumable sessions. */
 #define NS_flag_rightswitch 3 /*available*/
 #define NS_flag_maze_exit 4
 #define NS_flag_name_vulture_1 5
@@ -67,7 +67,7 @@
 #define NS_flag_name_eyeball_1 11
 #define NS_flag_name_eyeball_2 12
 #define NS_flag_eyeball_gone 13
-#define NS_flag_maze_switch_1 14
+#define NS_flag_maze_switch_1 14 /* maze_switch_* must be sequential */
 #define NS_flag_maze_switch_2 15
 #define NS_flag_maze_switch_3 16
 #define NS_flag_maze_switch_4 17
