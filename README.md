@@ -35,17 +35,22 @@ Aim to complete by Monday evening, 6 October.
 - [x] Hazards.
 - [x] Password entry.
 - [x] Bump: Actuate only if the off-axis is so close to alignment, say +-0.5? I keep triggering dialogue with my toe.
-- [ ] Transitions.
+- [x] Transitions.
 - [x] Maps.
 - [x] Music.
 - [x] Sound effects.
 - [x] Hello modal.
 - [x] Gameover modal.
 - [x] Password modal: Don't allow to submit the same name twice in a row. Also, strip all spaces when canonicalizing ("OSCARFINGER" should be fine)
-- [ ] Itch page.
+- [x] Itch page.
 - [ ] Can we prevent hero from staying in a stepping frame while dialogue runs?
 - [x] Redraw the font simpler. Have pity on the poor player, they are going to write it all by hand.
 - [x] Remember to turn off DISABLE_ENCRYPTION and the cheat room before releasing!
+- [ ] "Fresh mode" where we randomize: Beast names, cipher keys, glyph order, maze switches.
+- - But keep the current "Constant mode" for players that want to avail themselves of the spoilers.
+- - Also will need persistence. So up to three options at Hello: Continue, New Constant, New Fresh
+- - Ensure there's overlap among the key and name lengths, otherwise an experienced player could skip decrypting in Fresh mode.
+- [ ] When killed by a fireball, it would be better to linger for a sec and show soulballs exploding from the hero. Maybe for changelings too?
 
 ## Notes
 

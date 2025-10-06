@@ -1,9 +1,13 @@
 #include "../myscrypt.h"
 
+#define TRANSITION_TIME 0.333
+
 struct modal_play {
   struct modal hdr;
   int texid_bgbits;
   int texid_trans; // Previous screen, during a transition.
+  double trans_clock; // Seconds, counts down from TRANSITION_TIME.
+  int transdx,transdy; // Direction of travel during a transition. We only do pan transitions.
 };
 
 #define MODAL ((struct modal_play*)modal)
@@ -60,6 +64,38 @@ static int _play_init(struct modal *modal) {
 static void _play_focus(struct modal *modal,int focus) {
 }
 
+/* Render sprites.
+ * This is used for both the main render, and composing the transition bits.
+ * We don't touch graf's output texture; it can be either the main or texid_trans.
+ */
+ 
+static void play_render_sprites(struct modal *modal,int dx,int dy,const struct sprite *skip) {
+  graf_set_input(&g.graf,g.texid_tiles);
+  int i=0;
+  struct sprite **p=g.spritev;
+  for (;i<g.spritec;i++,p++) {
+    struct sprite *sprite=*p;
+    if (sprite->defunct) continue; // Won't come up normally, but can happen if a sprite defuncts via some other modal (eg Named Beasts)
+    if (sprite==skip) continue;
+    int dstx=(int)(sprite->x*NS_sys_tilesize)+dx;
+    int dsty=(int)(sprite->y*NS_sys_tilesize)+dy;
+    graf_tile(&g.graf,dstx,dsty,sprite->tileid,sprite->xform);
+  }
+}
+
+/* Render (texid_trans) with the current scene, minus the hero.
+ */
+ 
+static void play_render_transbits(struct modal *modal) {
+  graf_flush(&g.graf);
+  graf_set_output(&g.graf,MODAL->texid_trans);
+  graf_set_input(&g.graf,MODAL->texid_bgbits);
+  graf_decal(&g.graf,0,0,0,0,FBW,FBH);
+  play_render_sprites(modal,0,0,g.hero);
+  graf_flush(&g.graf);
+  graf_set_output(&g.graf,1);
+}
+
 /* Navigate.
  */
  
@@ -69,7 +105,18 @@ static void play_nav(struct modal *modal,int dx,int dy) {
   struct map *nmap=map_by_position(g.session.map->lng+dx,g.session.map->lat+dy);
   if (!nmap) return;
   
-  //TODO Prepare transition.
+  /* Prepare transition.
+   * If there's one in progress and it's opposite the requested transition, begin it partway thru.
+   * If the in-progress transition is for the same direction or the other axis, forget it and let it snap a little. (this is exceedingly rare)
+   */
+  if ((MODAL->trans_clock>0.0)&&(dx==-MODAL->transdx)&&(dy==-MODAL->transdy)) {
+    MODAL->trans_clock=TRANSITION_TIME-MODAL->trans_clock;
+  } else {
+    MODAL->trans_clock=TRANSITION_TIME;
+  }
+  MODAL->transdx=dx;
+  MODAL->transdy=dy;
+  play_render_transbits(modal);
   
   // Delete all sprites except the first hero. (yoink her)
   struct sprite *hero=0;
@@ -98,6 +145,10 @@ static void play_nav(struct modal *modal,int dx,int dy) {
  */
  
 static void _play_update(struct modal *modal,double elapsed,int input,int pvinput) {
+
+  if (MODAL->trans_clock>0.0) {
+    MODAL->trans_clock-=elapsed;
+  }
   
   // Update sprites.
   int i=g.spritec;
@@ -165,20 +216,29 @@ static void play_sort_sprites(struct modal *modal) {
  */
  
 static void _play_render(struct modal *modal) {
-  //TODO transition
-  graf_set_input(&g.graf,MODAL->texid_bgbits);
-  graf_decal(&g.graf,0,0,0,0,FBW,FBH);
-  
   play_sort_sprites(modal);
-  graf_set_input(&g.graf,g.texid_tiles);
-  int i=0;
-  struct sprite **p=g.spritev;
-  for (;i<g.spritec;i++,p++) {
-    struct sprite *sprite=*p;
-    if (sprite->defunct) continue; // Won't come up normally, but can happen if a sprite defuncts via some other modal (eg Named Beasts)
-    int dstx=(int)(sprite->x*NS_sys_tilesize);
-    int dsty=(int)(sprite->y*NS_sys_tilesize);
-    graf_tile(&g.graf,dstx,dsty,sprite->tileid,sprite->xform);
+  
+  // During a transition, we render two static backgrounds and then the sprites.
+  // (texid_trans) contains sprites from the outgoing scene, which will suspiciously stop animating.
+  if (MODAL->trans_clock>0.0) {
+    // (dstx,dsty) is the origin of the incoming scene.
+    int dstx=(int)((MODAL->transdx*FBW*MODAL->trans_clock)/TRANSITION_TIME);
+    int dsty=(int)((MODAL->transdy*FBH*MODAL->trans_clock)/TRANSITION_TIME);
+    // (trx,try) is the origin of the outgoing scene, always cardinally adjacent to (dstx,dsty).
+    int trx=dstx-FBW*MODAL->transdx;
+    int try=dsty-FBH*MODAL->transdy;
+    // And from there, it's easy:
+    graf_set_input(&g.graf,MODAL->texid_trans);
+    graf_decal(&g.graf,trx,try,0,0,FBW,FBH);
+    graf_set_input(&g.graf,MODAL->texid_bgbits);
+    graf_decal(&g.graf,dstx,dsty,0,0,FBW,FBH);
+    play_render_sprites(modal,dstx,dsty,0);
+    
+  // No transition. Same idea but simpler, and no texid_trans.
+  } else {
+    graf_set_input(&g.graf,MODAL->texid_bgbits);
+    graf_decal(&g.graf,0,0,0,0,FBW,FBH);
+    play_render_sprites(modal,0,0,0);
   }
 }
 
