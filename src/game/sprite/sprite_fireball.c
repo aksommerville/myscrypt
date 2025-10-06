@@ -1,11 +1,12 @@
 /* sprite_fireball.c
- * arg: none
+ * arg: u32 circleid (1..7), only used programmatically right here. Zero to target the hero.
  * Targets the hero at initialization and travels in a straight line until offscreen.
  */
  
 #include "game/myscrypt.h"
 
 #define FIREBALL_SPEED 6.0
+#define SOULBALL_SPEED 8.0
 
 struct sprite_fireball {
   struct sprite hdr;
@@ -19,7 +20,17 @@ struct sprite_fireball {
 
 static int _fireball_init(struct sprite *sprite) {
   SPRITE->tileid0=sprite->tileid;
+  
+  // Are we actually a soulball? Radiate outward per (arg).
+  int circle=sprite->arg;
+  if (circle) {
+    double t=(circle*M_PI*2.0)/7.0; // one-based or zero-based, it works out the same.
+    SPRITE->dx=cos(t)*SOULBALL_SPEED;
+    SPRITE->dy=-sin(t)*SOULBALL_SPEED;
+    return 0;
+  }
 
+  // We're a regular fireball. Target the hero.
   if (!g.hero) return -1;
   SPRITE->dx=g.hero->x-sprite->x;
   SPRITE->dy=g.hero->y-sprite->y;
@@ -30,6 +41,16 @@ static int _fireball_init(struct sprite *sprite) {
   SPRITE->dy=(SPRITE->dy*FIREBALL_SPEED)/distance;
   
   return 0;
+}
+
+static void fireball_kill_hero(struct sprite *sprite,struct sprite *hero) {
+  g.session.deathclock=1.500;
+  hero->defunct=1;
+  egg_play_sound(RID_sound_die,1.0,0.0);
+  
+  // Fireballs are also soulballs. Spawn a bunch more of us, at the hero's heart, radiating outward.
+  int i=7; // A witch's soul has seven circles; that's an immutable component of Dot Vine lore.
+  while (i>0) sprite_spawn_rid(RID_sprite_fireball,hero->x,hero->y,i--);
 }
 
 static void _fireball_update(struct sprite *sprite,double elapsed,int input,int pvinput) {
@@ -51,11 +72,11 @@ static void _fireball_update(struct sprite *sprite,double elapsed,int input,int 
     sprite->defunct=1;
     return;
   }
-  if (g.hero) {
+  if (g.hero&&!g.hero->defunct&&!sprite->arg) {
     double dx=g.hero->x-sprite->x;
     double dy=g.hero->y-sprite->y;
     if ((dx>=-0.5)&&(dy>=-0.5)&&(dx<0.5)&&(dy<0.5)) {
-      game_over(GAME_OVER_DEAD);
+      fireball_kill_hero(sprite,g.hero);
     }
   }
 }

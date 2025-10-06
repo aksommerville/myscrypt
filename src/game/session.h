@@ -8,6 +8,7 @@
 struct session {
   struct map *map;
   int navdx,navdy;
+  double deathclock; // Assailant may set this >0 to count down and later end game with disposition DEAD.
 };
 
 int session_reset(struct session *session);

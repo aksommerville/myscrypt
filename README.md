@@ -50,7 +50,7 @@ Aim to complete by Monday evening, 6 October.
 - - But keep the current "Constant mode" for players that want to avail themselves of the spoilers.
 - - Also will need persistence. So up to three options at Hello: Continue, New Constant, New Fresh
 - - Ensure there's overlap among the key and name lengths, otherwise an experienced player could skip decrypting in Fresh mode.
-- [ ] When killed by a fireball, it would be better to linger for a sec and show soulballs exploding from the hero. Maybe for changelings too?
+- [x] When killed by a fireball, it would be better to linger for a sec and show soulballs exploding from the hero. Maybe for changelings too?
 - [x] Hello modal: Keystroke during the intro animation should snap the animation complete instead of submitting.
 - - Also, the animation is driven randomly. Can we force a time limit on it?
 

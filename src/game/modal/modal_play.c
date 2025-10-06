@@ -158,6 +158,14 @@ static void _play_update(struct modal *modal,double elapsed,int input,int pvinpu
     MODAL->trans_clock-=elapsed;
   }
   
+  // Hero death pending?
+  if (g.session.deathclock>0.0) {
+    if ((g.session.deathclock-=elapsed)<=0.0) {
+      game_over(GAME_OVER_DEAD);
+      return;
+    }
+  }
+  
   // Update sprites.
   int i=g.spritec;
   while (i-->0) {

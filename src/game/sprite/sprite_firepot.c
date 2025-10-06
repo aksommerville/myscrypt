@@ -28,6 +28,9 @@ static int _firepot_init(struct sprite *sprite) {
 static void firepot_fire(struct sprite *sprite) {
   if (!g.hero) return;
   struct sprite *fireball=sprite_spawn_rid(RID_sprite_fireball,sprite->x,sprite->y,0);
+  if (fireball) {
+    egg_play_sound(RID_sound_fireball,1.0,0.0);
+  }
 }
 
 static void _firepot_update(struct sprite *sprite,double elapsed,int input,int pvinput) {
