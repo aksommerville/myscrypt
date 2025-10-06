@@ -10,10 +10,6 @@ void egg_client_quit(int status) {
 
 int egg_client_init() {
 
-  #if DISABLE_ENCRYPTION
-    fprintf(stderr,"!!! WARNING !!! Encryption is disabled. Don't release like this.\n");
-  #endif
-
   int fbw=0,fbh=0;
   egg_texture_get_size(&fbw,&fbh,1);
   if ((fbw!=FBW)||(fbh!=FBH)) {
@@ -28,9 +24,14 @@ int egg_client_init() {
   
   srand_auto();
   
-  //TODO Do we need some mechanism for changing the keys? For now, they are constant.
+  //TODO Randomize and persist cipher config.
   g.vigenere_key="OCTOPUS"; g.vigenere_keyc=7;
   g.playfair_key="PINEAPPLE"; g.playfair_keyc=9;
+  g.sub_alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  g.vulture_name="VINCENT"; g.vulture_namec=7;
+  g.penguin_name="PENELOPE"; g.penguin_namec=8;
+  g.eyeball_first_name="OSCAR"; g.eyeball_first_namec=5;
+  g.eyeball_last_name="FINGER"; g.eyeball_last_namec=6;
 
   if (!modal_spawn(&modal_type_hello)) return -1;
 

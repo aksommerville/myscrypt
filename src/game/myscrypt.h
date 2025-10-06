@@ -11,11 +11,6 @@
 #include "sprite/sprite.h"
 #include "session.h"
 
-/* Nonzero to print everything plaintext, and an indicator of which encryption would have been used.
- * For testing only.
- */
-#define DISABLE_ENCRYPTION 0
-
 #define FBW 320
 #define FBH 176
 
@@ -52,8 +47,17 @@ extern struct g {
   int resc,resa;
   struct map mapv[WORLD_MAP_SIZE];
   uint8_t physics[256];
-  const char *vigenere_key,*playfair_key;
+  
+  /* Encryption parameters.
+   * (sub_alphabet) is always 26 bytes long, containing 'A'..'Z' once each.
+   * Or null or empty to disable substitution.
+   * (vigenere_key,playfair_key) disable the cipher if empty.
+   * (*_name) aren't relevant to encryption but they're being configured similarly.
+   */
+  const char *vigenere_key,*playfair_key,*sub_alphabet;
   int vigenere_keyc,playfair_keyc;
+  const char *vulture_name,*penguin_name,*eyeball_first_name,*eyeball_last_name;
+  int vulture_namec,penguin_namec,eyeball_first_namec,eyeball_last_namec;
   
   struct graf graf;
   int pvinput;

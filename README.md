@@ -50,6 +50,8 @@ Aim to complete by Monday evening, 6 October.
 - - But keep the current "Constant mode" for players that want to avail themselves of the spoilers.
 - - Also will need persistence. So up to three options at Hello: Continue, New Constant, New Fresh
 - - Ensure there's overlap among the key and name lengths, otherwise an experienced player could skip decrypting in Fresh mode.
+- - As long as we're adding things, we could also add "Easy mode" with no encryption. Is there any point to playing in that mode? No. Maybe for children?
+- - Actually.... nix the Constant mode. Keep it like this for the jam, but afterward let's make it always randomize.
 - [x] When killed by a fireball, it would be better to linger for a sec and show soulballs exploding from the hero. Maybe for changelings too?
 - [x] Hello modal: Keystroke during the intro animation should snap the animation complete instead of submitting.
 - - Also, the animation is driven randomly. Can we force a time limit on it?

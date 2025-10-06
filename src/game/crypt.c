@@ -6,12 +6,6 @@ static int plain_letter_by_index(int p) {
   return 0x41+p;
 }
 
-static int subletter_by_index(int p) {
-  p=p%26;
-  if (p<0) p+=26;
-  return 0xc1+p;
-}
-
 // 0..25, or -1 if not a letter. Treats uppercase, lowercase, and substituted equally.
 static int letter_index(unsigned char ch) {
   if ((ch>=0x41)&&(ch<=0x5a)) return ch-0x41;
@@ -23,12 +17,31 @@ static int letter_index(unsigned char ch) {
 
 /* Apply the substitution cipher in place.
  * Our font tilesheet is just plaintext on the top and ciphertext on the bottom, just add 128.
+ * If a shuffle alphabet is present, we apply it here.
+ * No shuffle alphabet, we're noop.
+ * If you want mystery glyphs without shuffling, give us the identity alphabet.
  */
  
-static void encrypt_sub(char *v,int c) {
-  for (;c-->0;v++) {
-    if ((*v>0x20)&&((unsigned char)*v<0x80)) (*v)+=0x80;
+static char apply_sub(char src) {
+  if (g.sub_alphabet&&g.sub_alphabet[0]) {
+    if ((src>=0x61)&&(src<=0x7a)) src-=0x20; // Force uppercase. Our fonts have identical upper and lower glyphs, so this is always safe.
+    if ((src<0x41)||(src>0x5a)) return src; // Anything that isn't a letter, return it verbatim. Punctuation is identical between the plain and cipher fonts.
+    src-=0x41; // 0..25
+    src=g.sub_alphabet[src]; // Apply shuffle.
+    return src|0x80; // Use mystery glyphs.
+  } else {
+    return src;
   }
+}
+ 
+static void encrypt_sub(char *v,int c) {
+  for (;c-->0;v++) *v=apply_sub(*v);
+}
+
+static int subletter_by_index(int p) {
+  p=p%26;
+  if (p<0) p+=26;
+  return apply_sub(0x41+p);
 }
 
 /* Apply vigenere cipher and also substitution.
@@ -36,7 +49,13 @@ static void encrypt_sub(char *v,int c) {
  
 static int encrypt_vigenere(char *dst,int dsta,const char *src,int srcc,const char *key,int keyc) {
   if (dsta<srcc) return 0; // Length will not change. If it doesn't fit, we can abort.
-  if (keyc<1) return 0; // Oy what gives?
+  if (keyc<1) {
+    if (srcc<=dsta) {
+      memcpy(dst,src,srcc);
+      encrypt_sub(dst,srcc);
+    }
+    return srcc;
+  }
   int keyp=0;
   int i=srcc;
   for (;i-->0;dst++,src++) {
@@ -89,12 +108,13 @@ static void playfair_encrypt_digraph(char *dst,const char *src,const char *table
     bx=tmp;
   }
   
+  // Select the pre-substitution replacements.
   dst[0]=table[ay*5+ax];
   dst[1]=table[by*5+bx];
-  if (1) {
-    if ((dst[0]>0x20)&&((unsigned char)dst[0]<0x80)) dst[0]+=0x80;
-    if ((dst[1]>0x20)&&((unsigned char)dst[1]<0x80)) dst[1]+=0x80;
-  }
+  
+  // Apply substitution.
+  dst[0]=apply_sub(dst[0]);
+  dst[1]=apply_sub(dst[1]);
 }
 
 static int find_letter(const char *src,int srcc,char ch) {
@@ -108,7 +128,13 @@ static int find_letter(const char *src,int srcc,char ch) {
  */
  
 static int encrypt_playfair(char *dst,int dsta,const char *src,int srcc,const char *key,int keyc) {
-  if (keyc<1) return 0;
+  if (keyc<1) {
+    if (srcc<=dsta) {
+      memcpy(dst,src,srcc);
+      encrypt_sub(dst,srcc);
+    }
+    return srcc;
+  }
   
   // First, canonicalize the key by uppercasing, removing duplicates, and appending the entire alphabet (again dedupped).
   char fullkey[25];
@@ -220,24 +246,6 @@ int encrypt_text(char *dst,int dsta,int cipher,const char *src,int srcc) {
   if (!src) return 0;
   if (srcc<0) { srcc=0; while (src[srcc]) srcc++; }
   if (!srcc) return 0;
-  
-  #if DISABLE_ENCRYPTION
-    int dstc=srcc+4;
-    if (dstc>dsta) return 0;
-    memcpy(dst,src,srcc);
-    dst[srcc+0]=' ';
-    dst[srcc+1]='(';
-    switch (cipher) {
-      case NS_cipher_plaintext:    dst[srcc+2]='-'; break;
-      case NS_cipher_substitution: dst[srcc+2]='S'; break;
-      case NS_cipher_vigenere:     dst[srcc+2]='V'; break;
-      case NS_cipher_playfair:     dst[srcc+2]='P'; break;
-      default:                     dst[srcc+2]='?'; break;
-    }
-    dst[srcc+3]=')';
-    return dstc;
-  #endif
-  
   switch (cipher) {
     case NS_cipher_plaintext: {
         if (srcc<=dsta) memcpy(dst,src,srcc);
