@@ -46,7 +46,7 @@ Aim to complete by Monday evening, 6 October.
 - [x] Can we prevent hero from staying in a stepping frame while dialogue runs?
 - [x] Redraw the font simpler. Have pity on the poor player, they are going to write it all by hand.
 - [x] Remember to turn off DISABLE_ENCRYPTION and the cheat room before releasing!
-- [ ] "Fresh mode" where we randomize: Beast names, cipher keys, glyph order, maze switches.
+- [x] "Fresh mode" where we randomize: Beast names, cipher keys, glyph order, maze switches.
 - - But keep the current "Constant mode" for players that want to avail themselves of the spoilers.
 - - Also will need persistence. So up to three options at Hello: Continue, New Constant, New Fresh
 - - Ensure there's overlap among the key and name lengths, otherwise an experienced player could skip decrypting in Fresh mode.

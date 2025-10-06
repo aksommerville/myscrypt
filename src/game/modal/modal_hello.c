@@ -8,6 +8,14 @@
 
 #define VTX_LIMIT 256
 #define ANIMATION_TIME_LIMIT 1.500
+#define OPTION_LIMIT 5
+#define CURSOR_PERIOD 1.000
+
+#define STRIX_CONTINUE 59
+#define STRIX_CONSTANT 60 /* "jam mode" */
+#define STRIX_VARIABLE 61
+#define STRIX_STUPID   62
+#define STRIX_QUIT     63
 
 struct modal_hello {
   struct modal hdr;
@@ -17,6 +25,15 @@ struct modal_hello {
   double animclock;
   int all_correct;
   double stopanimclock; // Counts up from construction. If it exceeds ANIMATION_TIME_LIMIT, forcibly end the animation.
+  
+  struct option {
+    int strix; // Identifies the behavior for us too
+    int y; // Center of display
+  } optionv[OPTION_LIMIT];
+  int optionc;
+  int optionp;
+  double cursorclock;
+  int cursorax,cursorzx;
 };
 
 #define MODAL ((struct modal_hello*)modal)
@@ -40,7 +57,7 @@ static void hello_add_line(struct modal *modal,int strix,int y) {
     struct egg_render_tile *vtx=MODAL->vtxv+MODAL->vtxc++;
     vtx->x=x;
     vtx->y=y;
-    if ((ch>=0x41)&&(ch<=0x5a)) {
+    if ((strix<STRIX_CONTINUE)&&(ch>=0x41)&&(ch<=0x5a)) {
       vtx->tileid=0x41+rand()%26;
     } else {
       vtx->tileid=ch;
@@ -49,13 +66,56 @@ static void hello_add_line(struct modal *modal,int strix,int y) {
   }
 }
 
+// Ensure (optionp) in range, and gather (cursorax,cursorzx).
+static void hello_validate_optionp(struct modal *modal) {
+  if (MODAL->optionc<1) return;
+  if (MODAL->optionp<0) MODAL->optionp=MODAL->optionc-1;
+  else if (MODAL->optionp>=MODAL->optionc) MODAL->optionp=0;
+  
+  int y=MODAL->optionv[MODAL->optionp].y;
+  MODAL->cursorax=MODAL->cursorzx=FBW>>1;
+  const struct egg_render_tile *vtx=MODAL->vtxv;
+  int i=MODAL->vtxc;
+  for (;i-->0;vtx++) {
+    if (vtx->y!=y) continue;
+    if (vtx->x<MODAL->cursorax) MODAL->cursorax=vtx->x;
+    else if (vtx->x>MODAL->cursorzx) MODAL->cursorzx=vtx->x;
+  }
+  MODAL->cursorax-=16;
+  MODAL->cursorzx+=16;
+}
+
+static void hello_add_option(struct modal *modal,int strix,int y) {
+  if (MODAL->optionc>=OPTION_LIMIT) return;
+  struct option *option=MODAL->optionv+MODAL->optionc++;
+  option->strix=strix;
+  option->y=y;
+}
+
 static int _hello_init(struct modal *modal) {
   egg_play_song(RID_song_lets_brew_potions,0,1);
   
-  hello_add_line(modal, 2, 50);
-  hello_add_line(modal,25,120);
-  hello_add_line(modal,26,128);
-  hello_add_line(modal,27,136);
+  hello_add_line(modal, 2, 30);
+  hello_add_line(modal,25, 70);
+  hello_add_line(modal,26, 78);
+  hello_add_line(modal,27, 86);
+  
+  int y=120;
+  #define OPTIONLINE(strix) { \
+    hello_add_line(modal,strix,y); \
+    hello_add_option(modal,strix,y); \
+    y+=8; \
+  }
+  if (flag_get(NS_flag_valid)) { // Have a session in memory, can "Continue"
+    OPTIONLINE(STRIX_CONTINUE)
+  }
+  OPTIONLINE(STRIX_CONSTANT)
+  OPTIONLINE(STRIX_VARIABLE)
+  OPTIONLINE(STRIX_STUPID)
+  OPTIONLINE(STRIX_QUIT)
+  #undef OPTIONLINE
+  
+  hello_validate_optionp(modal);
   
   return 0;
 }
@@ -85,16 +145,43 @@ static void hello_advance_animation(struct modal *modal) {
   }
 }
 
-static void _hello_update(struct modal *modal,double elapsed,int input,int pvinput) {
-  if ((input&EGG_BTN_SOUTH)&&!(pvinput&EGG_BTN_SOUTH)) {
-    if (MODAL->all_correct) {
-      modal_defunct_all();
-      // CONSTANT VARIABLE RESTORE STUPID NOCRYPT. TODO let the user pick
-      session_reset(&g.session,SESSION_START_CONSTANT);
-      modal_spawn(&modal_type_play);
-    } else {
-      hello_finish_animation(modal);
+static void hello_move(struct modal *modal,int d) {
+  egg_play_sound(RID_sound_ui_motion,1.0,0.0);
+  MODAL->optionp+=d;
+  hello_validate_optionp(modal);
+}
+
+static void hello_begin_game(struct modal *modal,int start_mode) {
+  modal_defunct_all();
+  session_reset(&g.session,start_mode);
+  modal_spawn(&modal_type_play);
+}
+
+static void hello_activate(struct modal *modal) {
+  if (MODAL->all_correct) {
+    switch (MODAL->optionv[MODAL->optionp].strix) {
+      case STRIX_CONTINUE: hello_begin_game(modal,SESSION_START_RESTORE); break;
+      case STRIX_CONSTANT: hello_begin_game(modal,SESSION_START_CONSTANT); break;
+      case STRIX_VARIABLE: hello_begin_game(modal,SESSION_START_VARIABLE); break;
+      case STRIX_STUPID: hello_begin_game(modal,SESSION_START_STUPID); break;
+      // Not used: SESSION_START_NOCRYPT
+      case STRIX_QUIT: egg_terminate(0); break;
     }
+  } else {
+    hello_finish_animation(modal);
+  }
+}
+
+static void _hello_update(struct modal *modal,double elapsed,int input,int pvinput) {
+
+  if (input!=pvinput) {
+    if ((input&EGG_BTN_UP)&&!(pvinput&EGG_BTN_UP)) hello_move(modal,-1);
+    if ((input&EGG_BTN_DOWN)&&!(pvinput&EGG_BTN_DOWN)) hello_move(modal,1);
+    if ((input&EGG_BTN_SOUTH)&&!(pvinput&EGG_BTN_SOUTH)) hello_activate(modal);
+  }
+  
+  if ((MODAL->cursorclock-=elapsed)<=0.0) {
+    MODAL->cursorclock+=CURSOR_PERIOD;
   }
   MODAL->stopanimclock+=elapsed;
   if (!MODAL->all_correct&&((MODAL->animclock-=elapsed)<=0.0)) {
@@ -117,6 +204,17 @@ static void _hello_render(struct modal *modal) {
     .alpha=0xff,
   };
   egg_render(&un,MODAL->vtxv,sizeof(struct egg_render_tile)*MODAL->vtxc);
+  
+  double displacement=MODAL->cursorclock/CURSOR_PERIOD;
+  if (displacement>=0.5) displacement=1.0-displacement;
+  displacement=displacement*4.0-1.0; // -1..1
+  int dx=(int)(displacement*3.0);
+  int y=MODAL->optionv[MODAL->optionp].y;
+  struct egg_render_tile vtxv[2]={
+    {MODAL->cursorax+dx,y,'>',0},
+    {MODAL->cursorzx-dx,y,'<',0},
+  };
+  egg_render(&un,vtxv,sizeof(vtxv));
 }
 
 const struct modal_type modal_type_hello={
