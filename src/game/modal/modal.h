@@ -41,6 +41,9 @@ struct modal *modal_spawn(const struct modal_type *type);
 // Caller should spawn one right after, otherwise we're not wearing any pants.
 void modal_defunct_all();
 
+// Nonzero if it's in the global modal stack. Does not dereference (modal).
+int modal_is_resident(const struct modal *modal);
+
 extern const struct modal_type modal_type_play;
 extern const struct modal_type modal_type_dialogue; // overlay of play
 extern const struct modal_type modal_type_password; // ''

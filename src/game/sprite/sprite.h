@@ -28,6 +28,7 @@ struct sprite_type {
   void (*update)(struct sprite *sprite,double elapsed,int input,int pvinput);
   void (*bump)(struct sprite *sprite,struct sprite *bumper/*hero*/);
   void (*flag)(struct sprite *sprite,int flagid,int v);
+  void (*focus)(struct sprite *sprite,int focus); // Called for all sprites when the play modal loses focus (eg dialogue begins or ends)
 };
 
 /* Don't use these directly.

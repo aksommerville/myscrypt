@@ -43,7 +43,7 @@ Aim to complete by Monday evening, 6 October.
 - [x] Gameover modal.
 - [x] Password modal: Don't allow to submit the same name twice in a row. Also, strip all spaces when canonicalizing ("OSCARFINGER" should be fine)
 - [x] Itch page.
-- [ ] Can we prevent hero from staying in a stepping frame while dialogue runs?
+- [x] Can we prevent hero from staying in a stepping frame while dialogue runs?
 - [x] Redraw the font simpler. Have pity on the poor player, they are going to write it all by hand.
 - [x] Remember to turn off DISABLE_ENCRYPTION and the cheat room before releasing!
 - [ ] "Fresh mode" where we randomize: Beast names, cipher keys, glyph order, maze switches.
@@ -51,6 +51,8 @@ Aim to complete by Monday evening, 6 October.
 - - Also will need persistence. So up to three options at Hello: Continue, New Constant, New Fresh
 - - Ensure there's overlap among the key and name lengths, otherwise an experienced player could skip decrypting in Fresh mode.
 - [ ] When killed by a fireball, it would be better to linger for a sec and show soulballs exploding from the hero. Maybe for changelings too?
+- [ ] Hello modal: Keystroke during the intro animation should snap the animation complete instead of submitting.
+- - Also, the animation is driven randomly. Can we force a time limit on it?
 
 ## Notes
 

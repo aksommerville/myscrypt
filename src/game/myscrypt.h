@@ -65,7 +65,7 @@ extern struct g {
   
   struct modal *modalv[MODAL_LIMIT];
   int modalc;
-  struct modal *modal_focus; // WEAK
+  struct modal *modal_focus; // WEAK, just for detecting focus changes. May be dead already.
 } g;
 
 int res_init();

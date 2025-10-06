@@ -36,7 +36,6 @@ struct modal *modal_spawn(const struct modal_type *type) {
     return 0;
   }
   g.modalv[g.modalc++]=modal; // HANDOFF
-  g.modal_focus=0; // XXX I gave modals a "focus" hook but now thinking we won't need it. Come back here if we do.
   return modal;
 }
 
@@ -46,4 +45,16 @@ struct modal *modal_spawn(const struct modal_type *type) {
 void modal_defunct_all() {
   int i=g.modalc;
   while (i-->0) g.modalv[i]->defunct=1;
+}
+
+/* Test residence.
+ */
+
+int modal_is_resident(const struct modal *modal) {
+  if (!modal) return 0;
+  int i=g.modalc;
+  while (i-->0) {
+    if (g.modalv[i]==modal) return 1;
+  }
+  return 0;
 }

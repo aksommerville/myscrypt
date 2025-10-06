@@ -130,6 +130,21 @@ static void _hero_update(struct sprite *sprite,double elapsed,int input,int pvin
   hero_select_face(sprite);
 }
 
+/* Focus.
+ */
+ 
+static void _hero_focus(struct sprite *sprite,int focus) {
+  /* When the game loses focus, force my tile to the top row.
+   * This comes up when entering dialogue.
+   * We don't want Dot to hold her foot in the air thru the whole conversation, she'll get tired.
+   */
+  if (!focus) {
+    sprite->tileid&=0x8f;
+    SPRITE->animclock=0.0;
+    SPRITE->animframe=0;
+  }
+}
+
 /* Type definition.
  */
  
@@ -138,6 +153,7 @@ const struct sprite_type sprite_type_hero={
   .objlen=sizeof(struct sprite_hero),
   .init=_hero_init,
   .update=_hero_update,
+  .focus=_hero_focus,
 };
 
 /* Public: Get face direction.

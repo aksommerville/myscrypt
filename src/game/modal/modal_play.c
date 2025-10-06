@@ -62,6 +62,14 @@ static int _play_init(struct modal *modal) {
  */
  
 static void _play_focus(struct modal *modal,int focus) {
+  struct sprite **p=g.spritev;
+  int i=g.spritec;
+  for (;i-->0;p++) {
+    struct sprite *sprite=*p;
+    if (sprite->defunct) continue;
+    if (!sprite->type->focus) continue;
+    sprite->type->focus(sprite,focus);
+  }
 }
 
 /* Render sprites.

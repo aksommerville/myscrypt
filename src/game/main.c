@@ -46,24 +46,36 @@ void egg_client_update(double elapsed) {
   int pvinput=g.pvinput;
   g.pvinput=input;
   
-  // Acquire focus modal if needed, and update it. Abort if no focussed modal.
-  if (!g.modal_focus) {
-    int i=g.modalc;
-    while (i-->0) {
-      struct modal *modal=g.modalv[i];
-      if (modal->defunct) continue;
-      if (modal->type->interactive) {
-        g.modal_focus=modal;
-        break;
-      }
+  // Acquire the current focus modal from scratch. There must always be one.
+  struct modal *nfocus=0;
+  int i=g.modalc;
+  while (i-->0) {
+    struct modal *modal=g.modalv[i];
+    if (modal->defunct) continue;
+    if (modal->type->interactive) {
+      nfocus=modal;
+      break;
     }
-    if (!g.modal_focus) { egg_terminate(1); return; }
   }
+  if (!nfocus) {
+    fprintf(stderr,"No focus modal. Terminating.\n");
+    egg_terminate(1);
+  }
+  
+  // If the new focus modal is not the one we had yesterday, notify both of them.
+  if (nfocus!=g.modal_focus) {
+    if (modal_is_resident(g.modal_focus)) {
+      g.modal_focus->type->focus(g.modal_focus,0);
+    }
+    g.modal_focus=nfocus;
+    g.modal_focus->type->focus(g.modal_focus,1);
+  }
+  
+  // Update the focussed modal.
   g.modal_focus->type->update(g.modal_focus,elapsed,input,pvinput);
   
   // Reap defunct modals.
-  int i=g.modalc;
-  while (i-->0) {
+  for (i=g.modalc;i-->0;) {
     struct modal *modal=g.modalv[i];
     if (!modal->defunct) continue;
     g.modalc--;
