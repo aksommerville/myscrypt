@@ -32,6 +32,15 @@ int egg_client_init() {
   g.penguin_name="PENELOPE"; g.penguin_namec=8;
   g.eyeball_first_name="OSCAR"; g.eyeball_first_namec=5;
   g.eyeball_last_name="FINGER"; g.eyeball_last_namec=6;
+  /**
+  g.vigenere_key="FLAMBEAU"; g.vigenere_keyc=8;
+  g.playfair_key="FERRIS"; g.playfair_keyc=6;
+  g.sub_alphabet=0;
+  g.vulture_name="TEDDY"; g.vulture_namec=5;
+  g.penguin_name="VICKY"; g.penguin_namec=5;
+  g.eyeball_first_name="WALTER"; g.eyeball_first_namec=6;
+  g.eyeball_last_name="BUCKET"; g.eyeball_last_namec=6;
+  /**/
 
   if (!modal_spawn(&modal_type_hello)) return -1;
 

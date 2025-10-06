@@ -52,6 +52,7 @@ Aim to complete by Monday evening, 6 October.
 - - Ensure there's overlap among the key and name lengths, otherwise an experienced player could skip decrypting in Fresh mode.
 - - As long as we're adding things, we could also add "Easy mode" with no encryption. Is there any point to playing in that mode? No. Maybe for children?
 - - Actually.... nix the Constant mode. Keep it like this for the jam, but afterward let's make it always randomize.
+- - !!! Ensure that the eyeball's last name be even length with no doubled letters, otherwise playfair needs to mangle it.
 - [x] When killed by a fireball, it would be better to linger for a sec and show soulballs exploding from the hero. Maybe for changelings too?
 - [x] Hello modal: Keystroke during the intro animation should snap the animation complete instead of submitting.
 - - Also, the animation is driven randomly. Can we force a time limit on it?

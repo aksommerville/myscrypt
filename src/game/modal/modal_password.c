@@ -22,6 +22,8 @@ struct modal_password {
   int namec;
   char lastguess[NAME_LIMIT];
   int lastguessc;
+  char truename[NAME_LIMIT]; // Established at construction, then constant.
+  int truenamec;
 };
 
 #define MODAL ((struct modal_password*)modal)
@@ -67,7 +69,6 @@ static int password_canonicalize(char *dst,int dsta,const char *src,int srcc) {
 static void password_submit_name(struct modal *modal) {
 
   char guess[NAME_LIMIT];
-  char truename[NAME_LIMIT];
   int guessc=password_canonicalize(guess,sizeof(guess),MODAL->name,MODAL->namec);
   
   // If they guess the same thing twice, reject it. Ditto if it's all spaces.
@@ -78,14 +79,9 @@ static void password_submit_name(struct modal *modal) {
   memcpy(MODAL->lastguess,guess,guessc);
   MODAL->lastguessc=guessc;
   
-  // Acquire the True Name.
-  const char *truename_pre=0;
-  int truenamec=get_string(&truename_pre,1,MODAL->name_stringix);
-  truenamec=password_canonicalize(truename,sizeof(truename),truename_pre,truenamec);
-  
   // TODO Would like some livelier animation after a guess, both wrong and right.
   // If she guessed right, set the "gone" flag and dismiss the modal.
-  if ((truenamec==guessc)&&!memcmp(truename,guess,guessc)) {
+  if ((MODAL->truenamec==guessc)&&!memcmp(MODAL->truename,guess,guessc)) {
     egg_play_sound(RID_sound_ui_activate,1.0,0.0);
     flag_set(MODAL->flagid0+2,1);
     modal->defunct=1;
@@ -268,19 +264,46 @@ const struct modal_type modal_type_password={
   .render=_password_render,
 };
 
+/* Set truename from one or two strings.
+ * Fails if it doesn't fit.
+ */
+ 
+static int password_set_truename(struct modal *modal,const char *a,int ac,const char *b,int bc) {
+  if (!a) ac=0; else if (ac<0) { ac=0; while (a[ac]) ac++; }
+  if (!b) bc=0; else if (bc<0) { bc=0; while (b[bc]) bc++; }
+  if (ac+bc>sizeof(MODAL->truename)) return -1;
+  memcpy(MODAL->truename,a,ac);
+  memcpy(MODAL->truename+ac,b,bc);
+  MODAL->truenamec=ac+bc;
+  char *p=MODAL->truename;
+  int i=MODAL->truenamec;
+  for (;i-->0;p++) if ((*p>=0x61)&&(*p<=0x7a)) (*p)-=0x20;
+  return 0;
+}
+
 /* Public ctor.
  */
 
-struct modal *modal_spawn_password(uint8_t tileid,uint8_t stringix,uint8_t flagid) {
+struct modal *modal_spawn_password(uint8_t tileid,uint8_t flagid) {
   
   struct modal *modal=modal_spawn(&modal_type_password);
   if (!modal) return 0;
   
   MODAL->beast_tileid=tileid;
-  MODAL->name_stringix=stringix;
   MODAL->flagid0=flagid;
   MODAL->selx=ENTRY_COLC>>1;
   MODAL->sely=ENTRY_ROWC>>1;
+  
+  int err=-1;
+  switch (tileid) {
+    case 0x8d: err=password_set_truename(modal,g.vulture_name,g.vulture_namec,0,0); break;
+    case 0x8e: err=password_set_truename(modal,g.penguin_name,g.penguin_namec,0,0); break;
+    case 0x8f: err=password_set_truename(modal,g.eyeball_first_name,g.eyeball_first_namec,g.eyeball_last_name,g.eyeball_last_namec); break;
+  }
+  if (err<0) {
+    modal->defunct=1;
+    return 0;
+  }
   
   // Prepare the text-entry vertices.
   int entryw=ENTRY_COLC*ENTRY_SPACING;

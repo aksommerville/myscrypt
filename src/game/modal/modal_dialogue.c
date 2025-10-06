@@ -120,8 +120,12 @@ struct modal *modal_spawn_dialogue(uint8_t cipher,uint8_t stringix) {
     return 0;
   }
   
+  char digestedpt[MESSAGE_LIMIT];
+  int digestedptc=digest_plaintext(digestedpt,sizeof(digestedpt),plaintext,plaintextc);
+  if ((digestedptc<0)||(digestedptc>sizeof(digestedpt))) return 0;
+  
   char ciphertext[MESSAGE_LIMIT];
-  int ciphertextc=encrypt_text(ciphertext,sizeof(ciphertext),cipher,plaintext,plaintextc);
+  int ciphertextc=encrypt_text(ciphertext,sizeof(ciphertext),cipher,digestedpt,digestedptc);
   if ((ciphertextc<1)||(ciphertextc>sizeof(ciphertext))) return 0;
 
   struct modal *modal=modal_spawn(&modal_type_dialogue);

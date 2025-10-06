@@ -81,6 +81,11 @@ int get_string(void *dstpp,int rid,int ix);
 
 int encrypt_text(char *dst,int dsta,int cipher,const char *src,int srcc);
 
+/* Force uppercase and insert variables ("{KEY}" becomes "VALUE").
+ * Literal curlies are not legal in our text.
+ */
+int digest_plaintext(char *dst,int dsta,const char *src,int srcc);
+
 /* Produce an array of tile vertices for the given text.
  * We not not produce vertices for 0x20 or below (though technically we could).
  * (x0,y0) is the center of the first tile.
