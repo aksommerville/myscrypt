@@ -7,6 +7,7 @@
 #include "game/myscrypt.h"
 
 #define VTX_LIMIT 256
+#define ANIMATION_TIME_LIMIT 1.500
 
 struct modal_hello {
   struct modal hdr;
@@ -15,6 +16,7 @@ struct modal_hello {
   uint8_t tileidv[VTX_LIMIT]; // The correct tileid for each.
   double animclock;
   int all_correct;
+  double stopanimclock; // Counts up from construction. If it exceeds ANIMATION_TIME_LIMIT, forcibly end the animation.
 };
 
 #define MODAL ((struct modal_hello*)modal)
@@ -61,22 +63,45 @@ static int _hello_init(struct modal *modal) {
 static void _hello_focus(struct modal *modal,int focus) {
 }
 
+static void hello_finish_animation(struct modal *modal) {
+  MODAL->all_correct=1;
+  const uint8_t *correct=MODAL->tileidv;
+  struct egg_render_tile *vtx=MODAL->vtxv;
+  int i=MODAL->vtxc;
+  for (;i-->0;correct++,vtx++) {
+    vtx->tileid=*correct;
+  }
+}
+
+static void hello_advance_animation(struct modal *modal) {
+  MODAL->all_correct=1;
+  const uint8_t *correct=MODAL->tileidv;
+  struct egg_render_tile *vtx=MODAL->vtxv;
+  int i=MODAL->vtxc;
+  for (;i-->0;correct++,vtx++) {
+    if (vtx->tileid==*correct) continue;
+    vtx->tileid=0x41+rand()%26;
+    MODAL->all_correct=0;
+  }
+}
+
 static void _hello_update(struct modal *modal,double elapsed,int input,int pvinput) {
   if ((input&EGG_BTN_SOUTH)&&!(pvinput&EGG_BTN_SOUTH)) {
-    modal_defunct_all();
-    session_reset(&g.session);
-    modal_spawn(&modal_type_play);
+    if (MODAL->all_correct) {
+      modal_defunct_all();
+      session_reset(&g.session);
+      modal_spawn(&modal_type_play);
+    } else {
+      hello_finish_animation(modal);
+    }
   }
+  MODAL->stopanimclock+=elapsed;
   if (!MODAL->all_correct&&((MODAL->animclock-=elapsed)<=0.0)) {
     MODAL->animclock+=0.030;
-    MODAL->all_correct=1;
-    const uint8_t *correct=MODAL->tileidv;
-    struct egg_render_tile *vtx=MODAL->vtxv;
-    int i=MODAL->vtxc;
-    for (;i-->0;correct++,vtx++) {
-      if (vtx->tileid==*correct) continue;
-      vtx->tileid=0x41+rand()%26;
-      MODAL->all_correct=0;
+    if (MODAL->stopanimclock>ANIMATION_TIME_LIMIT) {
+      hello_finish_animation(modal);
+    } else {
+      hello_advance_animation(modal);
     }
   }
 }
