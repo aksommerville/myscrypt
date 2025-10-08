@@ -20,7 +20,7 @@ int egg_client_init() {
   if (res_init()<0) return -1;
   
   if (egg_texture_load_image(g.texid_font=egg_texture_new(),RID_image_font)<0) return -1;
-  if (egg_texture_load_image(g.texid_tiles=egg_texture_new(),RID_image_tiles)<0) return -1;
+  if (egg_texture_load_image(g.texid_tiles=egg_texture_new(),RID_image_color)<0) return -1;
   
   load_saved_game();
   
