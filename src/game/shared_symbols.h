@@ -56,7 +56,7 @@
 #define NS_flag_zero 0
 #define NS_flag_one 1
 #define NS_flag_valid 2 /* Goes nonzero at session start. For detecting resumable sessions. */
-#define NS_flag_rightswitch 3 /*available*/
+#define NS_flag_color 3
 #define NS_flag_maze_exit 4
 #define NS_flag_name_vulture_1 5
 #define NS_flag_name_vulture_2 6

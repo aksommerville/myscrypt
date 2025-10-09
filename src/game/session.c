@@ -52,6 +52,7 @@ static void random_maze_switches() {
  */
  
 static void session_configure_constant(struct session *session) {
+  use_tiles(RID_image_tiles); // Jam Mode uses black-and-white graphics; that was a rule for the jam.
   g.vigenere_key="OCTOPUS"; g.vigenere_keyc=7;
   g.playfair_key="PINEAPPLE"; g.playfair_keyc=9;
   memcpy(g.sub_alphabet,"ABCDEFGHIJKLMNOPQRSTUVWXYZ",26);
@@ -64,6 +65,7 @@ static void session_configure_constant(struct session *session) {
 }
  
 static void session_configure_variable(struct session *session) {
+  use_tiles(RID_image_color);
   random_crypto_keys();
   random_sub_alphabet();
   random_beast_names();
@@ -72,6 +74,7 @@ static void session_configure_variable(struct session *session) {
 }
  
 static void session_configure_stupid(struct session *session) {
+  use_tiles(RID_image_color);
   g.vigenere_keyc=0;
   g.playfair_keyc=0;
   g.sub_alphabet[0]=0;
@@ -87,6 +90,7 @@ static void session_configure_stupid(struct session *session) {
 }
  
 static void session_configure_nocrypt(struct session *session) {
+  use_tiles(RID_image_color);
   g.vigenere_keyc=0;
   g.playfair_keyc=0;
   random_sub_alphabet();
@@ -98,6 +102,8 @@ static void session_configure_nocrypt(struct session *session) {
 static void session_configure_restore(struct session *session) {
   // "Restore" just means "the currently loaded globals". The actual loading of the save file happens during init, see main.c.
   // The only state that really needs to change is the fact that Dot is alive again, and that's not recorded anywhere.
+  if (flag_get(NS_flag_color)) use_tiles(RID_image_color);
+  else use_tiles(RID_image_tiles);
 }
 
 /* Reset.

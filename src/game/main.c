@@ -20,7 +20,7 @@ int egg_client_init() {
   if (res_init()<0) return -1;
   
   if (egg_texture_load_image(g.texid_font=egg_texture_new(),RID_image_font)<0) return -1;
-  if (egg_texture_load_image(g.texid_tiles=egg_texture_new(),RID_image_color)<0) return -1;
+  // g.texid_tiles gets loaded by session as it starts up (there are two options)
   
   load_saved_game();
   
@@ -114,4 +114,15 @@ void egg_client_render() {
   }
 
   graf_flush(&g.graf);
+}
+
+/* Load tilesheet.
+ */
+ 
+void use_tiles(int imgid) {
+  if (imgid==g.imgid_tiles) return;
+  if (g.texid_tiles<=0) g.texid_tiles=egg_texture_new();
+  egg_texture_load_image(g.texid_tiles,imgid);
+  g.imgid_tiles=imgid;
+  flag_set(NS_flag_color,(imgid==RID_image_color)); // So we can load the same one on "Continue"
 }

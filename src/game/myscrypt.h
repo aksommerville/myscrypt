@@ -40,6 +40,7 @@ struct map {
 extern struct g {
   int texid_font;
   int texid_tiles;
+  int imgid_tiles; // RID_image_tiles BW, RID_image_color Color, or zero if unset.
   
   void *rom;
   int romc;
@@ -82,6 +83,8 @@ int res_get(void *dstpp,int tid,int rid);
 struct map *map_by_id(int rid);
 struct map *map_by_position(int lng,int lat);
 int get_string(void *dstpp,int rid,int ix);
+
+void use_tiles(int imgid);
 
 int encrypt_text(char *dst,int dsta,int cipher,const char *src,int srcc);
 
