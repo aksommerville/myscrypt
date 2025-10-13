@@ -8,7 +8,7 @@
 
 #define VTX_LIMIT 256
 #define ANIMATION_TIME_LIMIT 1.500
-#define OPTION_LIMIT 5
+#define OPTION_LIMIT 6
 #define CURSOR_PERIOD 1.000
 
 #define STRIX_CONTINUE 59
@@ -16,6 +16,7 @@
 #define STRIX_VARIABLE 61
 #define STRIX_STUPID   62
 #define STRIX_QUIT     63
+#define STRIX_COLOR    64 /* +65="Color", 66="B/W" */
 
 struct modal_hello {
   struct modal hdr;
@@ -25,6 +26,7 @@ struct modal_hello {
   double animclock;
   int all_correct;
   double stopanimclock; // Counts up from construction. If it exceeds ANIMATION_TIME_LIMIT, forcibly end the animation.
+  int color; // boolean
   
   struct option {
     int strix; // Identifies the behavior for us too
@@ -46,6 +48,24 @@ static void hello_add_line(struct modal *modal,int strix,int y) {
   const char *src=0;
   int srcc=get_string(&src,1,strix);
   if (srcc<1) return;
+  
+  // Cheesy hack to modify the "Video: Color|B/W" line.
+  char tmp[256];
+  if (strix==STRIX_COLOR) {
+    int tmpc=srcc;
+    if (tmpc>=sizeof(tmp)) return;
+    memcpy(tmp,src,srcc);
+    tmp[tmpc++]=' ';
+    const char *v=0;
+    int vc=get_string(&v,1,MODAL->color?65:66);
+    if ((vc>0)&&(tmpc<=sizeof(tmp)-vc)) {
+      memcpy(tmp+tmpc,v,vc);
+      tmpc+=vc;
+    }
+    src=tmp;
+    srcc=tmpc;
+  }
+  
   int w=srcc*8;
   int x=(FBW>>1)-(w>>1)+4;
   for (;srcc-->0;src++,x+=8) {
@@ -63,6 +83,17 @@ static void hello_add_line(struct modal *modal,int strix,int y) {
       vtx->tileid=ch;
     }
     vtx->xform=0;
+  }
+}
+
+static void hello_remove_line(struct modal *modal,int y) {
+  int i=MODAL->vtxc;
+  struct egg_render_tile *vtx=MODAL->vtxv+i-1;
+  for (;i-->0;vtx--) {
+    if (vtx->y!=y) continue;
+    // They should all be contiguous and we could exploit that to do just one memmove. But on the other hand, meh.
+    MODAL->vtxc--;
+    memmove(vtx,vtx+1,sizeof(struct egg_render_tile)*(MODAL->vtxc-i));
   }
 }
 
@@ -95,6 +126,8 @@ static void hello_add_option(struct modal *modal,int strix,int y) {
 static int _hello_init(struct modal *modal) {
   egg_play_song(RID_song_lets_brew_potions,0,1);
   
+  MODAL->color=flag_get(NS_flag_color);
+  
   hello_add_line(modal, 2, 30);
   hello_add_line(modal,25, 70);
   hello_add_line(modal,26, 78);
@@ -106,15 +139,17 @@ static int _hello_init(struct modal *modal) {
     hello_add_option(modal,strix,y); \
     y+=8; \
   }
+  OPTIONLINE(STRIX_COLOR)
   if (flag_get(NS_flag_valid)) { // Have a session in memory, can "Continue"
     OPTIONLINE(STRIX_CONTINUE)
   }
-  OPTIONLINE(STRIX_CONSTANT)
   OPTIONLINE(STRIX_VARIABLE)
+  OPTIONLINE(STRIX_CONSTANT)
   OPTIONLINE(STRIX_STUPID)
   OPTIONLINE(STRIX_QUIT)
   #undef OPTIONLINE
   
+  MODAL->optionp=1; // Don't start on Color. Use Continue or Normal Mode, whichever is the first real option.
   hello_validate_optionp(modal);
   
   return 0;
@@ -153,13 +188,25 @@ static void hello_move(struct modal *modal,int d) {
 
 static void hello_begin_game(struct modal *modal,int start_mode) {
   modal_defunct_all();
+  use_tiles(MODAL->color?RID_image_color:RID_image_tiles);
+  flag_set(NS_flag_color,MODAL->color);
   session_reset(&g.session,start_mode);
   modal_spawn(&modal_type_play);
+}
+
+// Caller provides the (y) of vertices, since they're in a position to know that.
+static void hello_toggle_color(struct modal *modal,int y) {
+  egg_play_sound(RID_sound_ui_motion,1.0,0.0);
+  MODAL->color=MODAL->color?0:1;
+  hello_remove_line(modal,y);
+  hello_add_line(modal,STRIX_COLOR,y);
+  hello_validate_optionp(modal);
 }
 
 static void hello_activate(struct modal *modal) {
   if (MODAL->all_correct) {
     switch (MODAL->optionv[MODAL->optionp].strix) {
+      case STRIX_COLOR: hello_toggle_color(modal,MODAL->optionv[MODAL->optionp].y); break;
       case STRIX_CONTINUE: hello_begin_game(modal,SESSION_START_RESTORE); break;
       case STRIX_CONSTANT: hello_begin_game(modal,SESSION_START_CONSTANT); break;
       case STRIX_VARIABLE: hello_begin_game(modal,SESSION_START_VARIABLE); break;

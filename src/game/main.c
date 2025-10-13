@@ -124,5 +124,4 @@ void use_tiles(int imgid) {
   if (g.texid_tiles<=0) g.texid_tiles=egg_texture_new();
   egg_texture_load_image(g.texid_tiles,imgid);
   g.imgid_tiles=imgid;
-  flag_set(NS_flag_color,(imgid==RID_image_color)); // So we can load the same one on "Continue"
 }

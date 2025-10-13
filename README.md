@@ -22,41 +22,6 @@ For [Inferno Jam 2025](https://itch.io/jam/inferno-jam-2025), theme "One Color".
 
 Aim to complete by Monday evening, 6 October.
 
-## TODO
-
-- [x] Draw font and sub cipher.
-- [x] Basic skeleton.
-- - [x] Modal stack.
-- - [x] Map loader. Single screen maps @ 20,11.
-- - [x] Sprites.
-- [x] Graphics.
-- [x] Dialogue.
-- [x] Global store.
-- [x] Hazards.
-- [x] Password entry.
-- [x] Bump: Actuate only if the off-axis is so close to alignment, say +-0.5? I keep triggering dialogue with my toe.
-- [x] Transitions.
-- [x] Maps.
-- [x] Music.
-- [x] Sound effects.
-- [x] Hello modal.
-- [x] Gameover modal.
-- [x] Password modal: Don't allow to submit the same name twice in a row. Also, strip all spaces when canonicalizing ("OSCARFINGER" should be fine)
-- [x] Itch page.
-- [x] Can we prevent hero from staying in a stepping frame while dialogue runs?
-- [x] Redraw the font simpler. Have pity on the poor player, they are going to write it all by hand.
-- [x] Remember to turn off DISABLE_ENCRYPTION and the cheat room before releasing!
-- [x] "Fresh mode" where we randomize: Beast names, cipher keys, glyph order, maze switches.
-- - But keep the current "Constant mode" for players that want to avail themselves of the spoilers.
-- - Also will need persistence. So up to three options at Hello: Continue, New Constant, New Fresh
-- - Ensure there's overlap among the key and name lengths, otherwise an experienced player could skip decrypting in Fresh mode.
-- - As long as we're adding things, we could also add "Easy mode" with no encryption. Is there any point to playing in that mode? No. Maybe for children?
-- - Actually.... nix the Constant mode. Keep it like this for the jam, but afterward let's make it always randomize.
-- - !!! Ensure that the eyeball's last name be even length with no doubled letters, otherwise playfair needs to mangle it.
-- [x] When killed by a fireball, it would be better to linger for a sec and show soulballs exploding from the hero. Maybe for changelings too?
-- [x] Hello modal: Keystroke during the intro animation should snap the animation complete instead of submitting.
-- - Also, the animation is driven randomly. Can we force a time limit on it?
-
 ## Notes
 
 Ensure that we implement Vigenere and Playfair exactly as Wikipedia describes them, so users have a chance.
