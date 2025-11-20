@@ -124,7 +124,7 @@ static void hello_add_option(struct modal *modal,int strix,int y) {
 }
 
 static int _hello_init(struct modal *modal) {
-  egg_play_song(RID_song_lets_brew_potions,0,1);
+  egg_play_song(1,RID_song_lets_brew_potions,1,0.5f,0.0f);
   
   MODAL->color=flag_get(NS_flag_color);
   

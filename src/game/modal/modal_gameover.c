@@ -105,9 +105,7 @@ struct modal *modal_spawn_gameover(int disposition) {
   
   MODAL->disposition=disposition;
   if (disposition==GAME_OVER_WIN) {
-    egg_play_song(RID_song_frolic_in_the_dew,0,1);
-  } else {
-    egg_play_song(RID_song_in_tongues,0,1);//TODO need failure music too
+    egg_play_song(1,RID_song_frolic_in_the_dew,1,0.5f,0.0f);
   }
   
   /* Select a message and have it split into glyph tile vertices.

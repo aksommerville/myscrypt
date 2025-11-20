@@ -105,7 +105,7 @@ static void session_configure_restore(struct session *session) {
  
 int session_reset(struct session *session,int start_mode) {
 
-  egg_play_song(RID_song_in_tongues,0,1);
+  egg_play_song(1,RID_song_in_tongues,1,0.5f,0.0f);
 
   // Clear things.
   while (g.spritec>0) sprite_del(g.spritev[--g.spritec]);
