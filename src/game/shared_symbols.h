@@ -5,6 +5,9 @@
 #ifndef SHARED_SYMBOLS_H
 #define SHARED_SYMBOLS_H
 
+#define EGGDEV_importUtil "res,font,graf,stdlib" /* Comma-delimited list of Egg 'util' units to include in the build. */
+#define EGGDEV_ignoreData "" /* Comma-delimited glob patterns for editor to ignore under src/data/ */
+
 #define NS_sys_tilesize 16
 // Define (mapw,maph) if you're using fixed-size maps.
 #define NS_sys_mapw 20
